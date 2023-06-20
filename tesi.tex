@@ -1,0 +1,94 @@
+\documentclass[a4paper,12pt]{report}
+\usepackage{graphicx} % includegraphics command is implemented here
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+
+\begin{document}
+
+\selectlanguage{italian}
+
+\begin{titlepage}
+\centering
+
+\textbf{\large Università degli Studi di Bari} \\
+\vspace{0.5cm}
+\textbf{\large Dipartimento di Informatica} \\
+\vspace{2cm}
+\includegraphics[width=40mm,scale=0.5]{logo.png} \\
+\vspace{2cm}
+\textbf{\large Tesi di Laurea Triennale in Informatica e Tecnologie per la Produzione del Software} \\
+\vspace{1cm}
+\textbf{\LARGE Progettazione sistema SPIR} \\
+\vspace{2cm}
+\textbf{\large Autore:} \\
+\textbf{Antonio Ricciardi} \\
+\vspace{0.5cm}
+\textbf{\large Relatore:} \\
+\textbf{Giovanni Dimauro} \\
+\vspace{0.5cm}
+\textbf{\large Correlatore:} \\
+\textbf{Rosalia Maglietta} \\
+\vfill
+\textbf{\large Anno Accademico 2022/2023} % Inserisci l'anno accademico corretto
+    
+\end{titlepage}
+
+\tableofcontents
+\chapter{Introduzione}
+\section{Fondamenti teorici}
+\subsection{Elaborazione delle immagini}
+La manipolazione e l'elaborazione delle immagini svolgono un ruolo fondamentale in numerosi settori, tra cui la visione artificiale, la grafica computazionale e l'analisi di immagini biomediche. 
+In quest'ambito, gli operatori morfologici e logici giocano un ruolo chiave nella modifica e nell'estrazione di informazioni significative da immagini digitali. \\
+Gli operatori morfologici sono basati sulla teoria della morfologia matematica e vengono utilizzati per la manipolazione di forme geometriche all'interno di un'immagine. \\
+Essi consentono di eseguire operazioni come l'erosione, la dilatazione, l'apertura e la chiusura, che possono essere utilizzate per rimuovere rumore, riempire buchi o separare oggetti connessi. \\
+L'erosione riduce le regioni di colore o intensità nell'immagine, mentre la dilatazione le amplia. L'apertura è una combinazione di erosione seguita da dilatazione e viene utilizzata per rimuovere piccoli oggetti o dettagli indesiderati. La chiusura, al contrario, consiste in una dilatazione seguita da erosione ed è utile per riempire buchi o connettere regioni separate.
+Parallelamente agli operatori morfologici, gli operatori logici sono ampiamente utilizzati per combinare e confrontare immagini. Gli operatori logici fondamentali includono l'AND, l'OR e il NOT, che consentono di creare maschere o combinare informazioni da diverse immagini. \\
+Ad esempio, l'operatore AND può essere utilizzato per identificare le regioni comuni tra due immagini, mentre l'operatore OR può essere impiegato per unire due immagini sovrapposte in una sola immagine risultante. \\
+L'operatore NOT, invece, inverte i valori di pixel di un'immagine, consentendo di creare effetti speciali o evidenziare determinate regioni.
+
+\subsection{Feature extraction}
+\subsection{Object Segmentation}
+\subsection{Algoritmo SIFT}
+\subsection{Computazione Parallela}
+\section{Stato dell'arte}
+\subsection{Introduzione a SPIR}
+\subsection{Approcci precedenti per l'estrazione di feature da immagini}
+\subsection{Limitazioni dei metodi esistenti}
+
+\chapter{Metodi}
+\section{Implementazione di SPIR}
+\subsection{Riscrittura dell'algoritmo originale (MATLAB) in Python}
+\subsection{Utilizzo di Python come linguaggio per backend di SPIR}
+\subsection{Estrazione della maschera e della pinna del delfino}
+\subsection{Estrazione delle feature e salvataggio del dataset}
+\subsection{Match basato sulle feature estratte da SIFT}
+\section{Approccio basato su OpenCV per l'estrazione delle maschere}
+\subsection{Miglioramenti apportati al processo di ritaglio}
+\subsection{Parallelismo e tempi di esecuzione ridotti}
+\subsection{Riduzione dello spazio occupato dal dataset di feature estratte}
+\subsection{Adozione di gRPC per il trasferimento dei dati}
+\section{Approccio con deep learning per l'estrazione delle maschere}
+\subsection{Implementazione di una rete neurale basata su U-Net}
+\subsection{Utilizzo delle maschere per il ritaglio della pinna}
+\subsection{Limitazioni e problematiche riscontrate}
+\section{Interfaccia utente e interazione}
+\subsection{Creazione di un'interfaccia per l'interazione con il backend Python}
+\subsection{Utilizzo di Flutter per sviluppare un'interfaccia multipiattaforma}
+
+\chapter{Risultati sperimentali}
+\section{Valutazione dei risultati}
+\subsection{Confronto tra i diversi approcci implementati}
+\subsection{Analisi delle prestazioni e dei risultati ottenuti}
+
+\chapter{Conclusioni}
+\section{Riepilogo degli obiettivi raggiunti}
+\section{Possibili sviluppi futuri}
+
+\chapter{Codice sorgente}
+\section{Implementazione dell'algoritmo SPIR}
+\section{Implementazione della rete neurale U-Net}
+\section{Codice per l'estrazione delle maschere con OpenCV}
+\section{Codice per l'interfaccia utente in Flutter}
+
+\end{document}
