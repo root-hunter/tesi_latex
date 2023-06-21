@@ -1,11 +1,39 @@
 \documentclass[a4paper,12pt]{report}
-\usepackage{graphicx} % includegraphics command is implemented here
-\usepackage[T1]{fontenc}
+
+\usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{fontspec}
+
+\setmainfont{Calibri}
+
+\geometry{
+  a4paper,
+  left=4.5cm,
+  right=3cm,
+  top=4cm,
+  bottom=4cm,
+}
+
+\titleformat{\section}
+  {\fontsize{14}{16}\bfseries}
+  {\thesection}
+  {1em}
+  {}
+
+\titleformat{\subsection}
+  {\fontsize{12}{14}\bfseries}
+  {\thesubsection}
+  {1em}
+  {}
+
+\linespread{1.5}
+\setlength{\parindent}{0pt}
 
 \begin{document}
-
 \selectlanguage{italian}
 
 \begin{titlepage}
@@ -15,7 +43,7 @@
 \vspace{0.5cm}
 \textbf{\large Dipartimento di Informatica} \\
 \vspace{2cm}
-\includegraphics[width=40mm,scale=0.5]{logo.png} \\
+\includegraphics[width=40mm,scale=0.5]{assets/images/logo.png} \\
 \vspace{2cm}
 \textbf{\large Tesi di Laurea Triennale in Informatica e Tecnologie per la Produzione del Software} \\
 \vspace{1cm}
@@ -27,8 +55,9 @@
 \textbf{\large Relatore:} \\
 \textbf{Giovanni Dimauro} \\
 \vspace{0.5cm}
-\textbf{\large Correlatore:} \\
+\textbf{\large Correlatori:} \\
 \textbf{Rosalia Maglietta} \\
+\textbf{Carla Cherubini} \\
 \vfill
 \textbf{\large Anno Accademico 2022/2023} % Inserisci l'anno accademico corretto
     
@@ -36,7 +65,8 @@
 
 \tableofcontents
 \chapter{Introduzione}
-\section{Fondamenti teorici}
+Fondamentale implementare la fotoid - 
+\section{Stato dell'arte}
 \subsection{Elaborazione delle immagini}
 La manipolazione e l'elaborazione delle immagini svolgono un ruolo fondamentale in numerosi settori, tra cui la visione artificiale, la grafica computazionale e l'analisi di immagini biomediche. 
 In quest'ambito, gli operatori morfologici e logici giocano un ruolo chiave nella modifica e nell'estrazione di informazioni significative da immagini digitali. \\
@@ -46,23 +76,22 @@ L'erosione riduce le regioni di colore o intensità nell'immagine, mentre la dil
 Parallelamente agli operatori morfologici, gli operatori logici sono ampiamente utilizzati per combinare e confrontare immagini. Gli operatori logici fondamentali includono l'AND, l'OR e il NOT, che consentono di creare maschere o combinare informazioni da diverse immagini. \\
 Ad esempio, l'operatore AND può essere utilizzato per identificare le regioni comuni tra due immagini, mentre l'operatore OR può essere impiegato per unire due immagini sovrapposte in una sola immagine risultante. \\
 L'operatore NOT, invece, inverte i valori di pixel di un'immagine, consentendo di creare effetti speciali o evidenziare determinate regioni.
-
-\subsection{Feature extraction}
+\subsection{Feature Extraction}
 \subsection{Object Segmentation}
-\subsection{Algoritmo SIFT}
-\subsection{Computazione Parallela}
-\section{Stato dell'arte}
-\subsection{Introduzione a SPIR}
-\subsection{Approcci precedenti per l'estrazione di feature da immagini}
-\subsection{Limitazioni dei metodi esistenti}
+\subsection{User Interface}
+\subsection{SPIR}
+
+\section{Obiettivi}
 
 \chapter{Metodi}
-\section{Implementazione di SPIR}
+\section{Porting del sistema SPIR}
 \subsection{Riscrittura dell'algoritmo originale (MATLAB) in Python}
 \subsection{Utilizzo di Python come linguaggio per backend di SPIR}
 \subsection{Estrazione della maschera e della pinna del delfino}
 \subsection{Estrazione delle feature e salvataggio del dataset}
 \subsection{Match basato sulle feature estratte da SIFT}
+\subsection{Architettura del sistema}
+
 \section{Approccio basato su OpenCV per l'estrazione delle maschere}
 \subsection{Miglioramenti apportati al processo di ritaglio}
 \subsection{Parallelismo e tempi di esecuzione ridotti}
@@ -71,7 +100,6 @@ L'operatore NOT, invece, inverte i valori di pixel di un'immagine, consentendo d
 \section{Approccio con deep learning per l'estrazione delle maschere}
 \subsection{Implementazione di una rete neurale basata su U-Net}
 \subsection{Utilizzo delle maschere per il ritaglio della pinna}
-\subsection{Limitazioni e problematiche riscontrate}
 \section{Interfaccia utente e interazione}
 \subsection{Creazione di un'interfaccia per l'interazione con il backend Python}
 \subsection{Utilizzo di Flutter per sviluppare un'interfaccia multipiattaforma}
@@ -80,6 +108,7 @@ L'operatore NOT, invece, inverte i valori di pixel di un'immagine, consentendo d
 \section{Valutazione dei risultati}
 \subsection{Confronto tra i diversi approcci implementati}
 \subsection{Analisi delle prestazioni e dei risultati ottenuti}
+\section{Limitazioni e problematiche riscontrate con approccio Deep Learning}
 
 \chapter{Conclusioni}
 \section{Riepilogo degli obiettivi raggiunti}
