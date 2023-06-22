@@ -5,4 +5,5 @@
 *.synctex*
 *.toc
 *.xdv
-.vscode
+*.run.*
+*.bcf
