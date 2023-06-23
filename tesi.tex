@@ -12,6 +12,7 @@
 \usepackage{caption}
 \usepackage{listings}
 \usepackage{enumitem}
+\usepackage{float}
 
 
 
@@ -142,12 +143,12 @@ prepare_images_vlfeat.m
         \begin{minipage}{0.35\textwidth}
           \centering
           \includegraphics[width=\textwidth]{assets/images/cielab2.jpg}  
-          \caption{CIELAB 2D}
+          \caption{Spazio colore CIELAB in 2D}
         \end{minipage}
         \begin{minipage}{0.35\textwidth}
           \centering
           \includegraphics[width=\textwidth]{assets/images/cielab1.jpg}   
-          \caption{CIELAB 3D}
+          \caption{Spazio colore CIELAB in 3D}
         \end{minipage}
       \end{figure}
 
@@ -237,6 +238,33 @@ thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         \item Dilatazione (Dilation): L'operazione di dilatazione viene utilizzata per \\espandere le regioni di pixel bianchi nell'immagine. In sostanza, ogni pixel bianco nell'immagine di input viene "gonfiato" e riempito con pixel bianchi circostanti. Ciò ha l'effetto di aumentare le dimensioni dell'oggetto o delle strutture bianche nell'immagine. L'operazione di dilatazione è utile per riempire eventuali buchi o lacune all'interno delle regioni, connettere regioni separate o aumentare la dimensione degli oggetti.
         \item Chiusura (Closing): L'operazione di chiusura combina l'erosione seguita dalla dilatazione per rimuovere piccoli buchi o aree isolate all'interno delle regioni bianche dell'immagine. Inizialmente, l'operazione di erosione viene applicata per ridurre le dimensioni delle regioni bianche e rimuovere dettagli indesiderati. Successivamente, l'operazione di dilatazione viene applicata per riempire i buchi e ricongiungere le regioni vicine che potrebbero essere state separate durante l'erosione. L'operazione di chiusura è utile per ridurre il rumore, migliorare la coerenza delle regioni e completare le forme degli oggetti.
       \end{itemize}
+      \begin{figure}[H]
+        \centering
+        \begin{minipage}{0.3\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/alg_area/original.png}   
+          \caption{Maschera originale}
+        \end{minipage}
+        \begin{minipage}{0.3\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/alg_area/find.png}  
+          \caption{Divisione in segmenti}
+        \end{minipage}
+        \begin{minipage}{0.3\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/alg_area/clear.png}   
+          \caption{Rimozione segmenti minori}
+        \end{minipage}
+      \end{figure}
+     
+      Per quanto riguarda l'eliminazione di segmenti non appartenenti all'area della pinna del delfino
+      è stato scritto un semplice algoritmo che si basa sul trovare tutti i segmenti separati all'interno della maschera,
+      cercare il maggiore in base all'area del segmento e poi rimuovere tutto il resto dalla maschera, 
+      questa operazione viene ripetuta sia prima che dopo l'utilizzo degli operatori morfologici, con il fine di
+      eliminare eventuali scarti dell'erosione o del metodo OTSU.
+      
+  
+      
       \newpage
       \begin{lstlisting}
 #Trova i contorni nell'immagine binaria
@@ -267,6 +295,8 @@ kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5,5))
 mask = cv2.morphologyEx(mask, cv2.MORPH_DILATE, kernel=kernel, iterations=1)
 mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel=kernel, iterations=1)
 
+#Altra Rimozione dei segmenti
+#...
 #Applico la maschera all'immagine originale per estrarre la pinna
 fin = cv2.bitwise_and(image, image, mask=mask)
       \end{lstlisting}
