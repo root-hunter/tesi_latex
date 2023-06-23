@@ -13,6 +13,7 @@
 \usepackage{listings}
 \usepackage{enumitem}
 \usepackage{float}
+\usepackage{natbib}
 
 
 
@@ -121,7 +122,7 @@
     in particolare slegando le componenti di interazione e logica del sistema si ha la possibilità
     di utilizzare le tecnologie più apporpriate a seconda del contesto, per poi mettere in comunicazione le 
     varie componenti.
-    \subsection{Riscrittura dell'algoritmo originale (MATLAB) in Python}
+    \subsection{Estrazione della maschera}
       Lo sviluppo si è concentrato inizialmente sulla riscrittura delle funzionalità principali di SPIR,
       come linguaggio è stato scelto Python per i seguenti motivi:
       \begin{itemize}
@@ -201,8 +202,7 @@ b = im_lab[:,:,2]
 # Applico il metodo di Otsu al canale B
 thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 \end{lstlisting}
-
-        L'algoritmo di Otsu calcola la soglia ottimale in base all'istogramma dei livelli di grigio dell'immagine.
+        L'algoritmo di Otsu \cite{otsu1979threshold} calcola la soglia ottimale in base all'istogramma dei livelli di grigio dell'immagine.
         L'istogramma rappresenta la distribuzione dei valori di grigio presenti nell'immagine.
         \newpage
         L'obiettivo è trovare la soglia che massimizza la varianza tra le due classi (primo piano e sfondo), 
@@ -263,10 +263,8 @@ thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
       cercare quello con l'area maggiore e poi rimuovere tutto il resto dalla maschera, 
       questa operazione viene ripetuta sia prima che dopo l'utilizzo degli operatori morfologici, con il fine di
       eliminare eventuali scarti dell'erosione o del metodo OTSU.
-      
-  
-      
       \newpage
+
 \begin{lstlisting}
 #Trova i contorni nella maschera
 contours, _ = cv2.findContours(im_thr, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
@@ -301,18 +299,36 @@ mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel=kernel, iterations=1)
 #Applico la maschera all'immagine originale per estrarre la pinna
 fin = cv2.bitwise_and(image, image, mask=mask)
 \end{lstlisting}
-
+    \subsection{Estrazione feature}
+    \begin{figure}[H]
+      \centering
+      \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/features_extraction/original.png}   
+        \caption{Immagine originale}
+      \end{minipage}
+      \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/features_extraction/gray.png}  
+        \caption{Pinna estratta in scala di grigi}
+      \end{minipage}
+      \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/features_extraction/features.png}   
+        \caption{Feature estratte}
+      \end{minipage}
+    \end{figure}
       A questo punto la maschera della pinna del delfino è stata estratta, 
       ora si può passare alla fase di feature extraction, nello specifico l'algoritmo utilizzato 
       è Scale Invariant Feature Transform (SIFT), lo stesso della versione MATLAB,
       anche se nel corso dello sviluppo sono stati testati i seguenti algorimti di feature extraction:
       \begin{itemize}
-        \item SIFT (Scale-Invariant Feature Transform): L'algoritmo SIFT è ampiamente utilizzato per estrarre feature invarianti rispetto alla scala e alla rotazione. Rileva punti di interesse in un'immagine, calcola le loro descrizioni basate su gradienti di intensità e crea una rappresentazione compatta delle feature. SIFT è noto per la sua robustezza rispetto alle variazioni di scala, rotazione, illuminazione e occlusioni.
-        \item ORB (Oriented FAST and Rotated BRIEF): L'algoritmo ORB combina le caratteristiche di rilevazione rapida degli angoli (FAST) e il descrittore binario BRIEF. È un algoritmo efficiente che estrae feature invarianti rispetto alla scala e all'orientazione. ORB utilizza un rilevatore di angoli per individuare punti di interesse, calcola gli orientamenti locali e genera descrittori binari per le feature.
-        \item BRISK (Binary Robust Invariant Scalable Keypoints): L'algoritmo BRISK è un metodo basato su descrittori binari che utilizza un rilevatore adattativo di punti di interesse. BRISK calcola un set di punti di interesse utilizzando un rilevatore adattativo basato su una rappresentazione piramidale dell'immagine. Successivamente, calcola i descrittori binari basati su informazioni di intensità e orientazione.
-        \item AKAZE (Accelerated-KAZE): L'algoritmo AKAZE è una variante accelerata dell'algoritmo KAZE, che a sua volta si basa sulla rilevazione di blob multiscale e sul calcolo di descrittori basati su regioni. AKAZE è noto per la sua robustezza alle variazioni di scala, rotazione, rumore e cambiamenti di illuminazione.
+        \item SIFT (Scale-Invariant Feature Transform \cite{lowe2004distinctive}): L'algoritmo SIFT è ampiamente utilizzato per estrarre feature invarianti rispetto alla scala e alla rotazione. Rileva punti di interesse in un'immagine, calcola le loro descrizioni basate su gradienti di intensità e crea una rappresentazione compatta delle feature. SIFT è noto per la sua robustezza rispetto alle variazioni di scala, rotazione, illuminazione e occlusioni.
+        \item ORB (Oriented FAST and Rotated BRIEF \cite{rublee2011orb}): L'algoritmo ORB combina le caratteristiche di rilevazione rapida degli angoli (FAST) e il descrittore binario BRIEF. È un algoritmo efficiente che estrae feature invarianti rispetto alla scala e all'orientazione. ORB utilizza un rilevatore di angoli per individuare punti di interesse, calcola gli orientamenti locali e genera descrittori binari per le feature.
+        \newpage
+        \item BRISK (Binary Robust Invariant Scalable Keypoints \cite{leutenegger2011brisk}): L'algoritmo BRISK è un metodo basato su descrittori binari che utilizza un rilevatore adattativo di punti di interesse. BRISK calcola un set di punti di interesse utilizzando un rilevatore adattativo basato su una rappresentazione piramidale dell'immagine. Successivamente, calcola i descrittori binari basati su informazioni di intensità e orientazione.
+        \item AKAZE (Accelerated-KAZE \cite{alcantarilla2012fast}): L'algoritmo AKAZE è una variante accelerata dell'algoritmo KAZE, che a sua volta si basa sulla rilevazione di blob multiscale e sul calcolo di descrittori basati su regioni. AKAZE è noto per la sua robustezza alle variazioni di scala, rotazione, rumore e cambiamenti di illuminazione.
       \end{itemize}
-      \newpage
 \begin{lstlisting}
 #La pinna estratta viene convertita in scala di grigi
 gray_fin = cv2.cvtColor(fin, cv2.COLOR_BGR2GRAY)
@@ -333,35 +349,41 @@ selected_indices = np.where(variances > variance_threshold)[0]
 sift_keypoints = [sift_keypoints[i] for i in selected_indices]
 sift_descriptors = sift_descriptors[selected_indices]
 \end{lstlisting}
-L'utilizzo della varianza come criterio per la selezione delle feature si basa su una considerazione matematica fondamentale:
-la varianza misura la dispersione dei dati intorno alla loro media.
-In termini di feature extraction, la varianza può essere utilizzata 
-per valutare quanto le feature variano all'interno di un set di dati.
-Feature con varianza alta indicano una maggiore variabilità dei valori,
-mentre feature con varianza bassa indicano una minore variabilità dei valori.
-L'idea di utilizzare la varianza per selezionare le feature 
-più importanti si basa sul presupposto che le feature più rilevanti 
-per un determinato compito o problema presentano una maggiore variabilità rispetto alle feature meno rilevanti.
-Pertanto, selezionando le feature con una varianza superiore a una soglia specificata, 
-si tende a mantenere le feature che portano informazioni significative.
-    \subsection{Backend SPIR}
+      L'utilizzo della varianza come criterio per la selezione delle feature si basa su una considerazione matematica fondamentale:
+      la varianza misura la dispersione dei dati intorno alla loro media.
+      In termini di feature extraction, la varianza può essere utilizzata 
+      per valutare quanto le feature variano all'interno di un set di dati.
+      Feature con varianza alta indicano una maggiore variabilità dei valori,
+      mentre feature con varianza bassa indicano una minore variabilità dei valori.
+      L'idea di utilizzare la varianza per selezionare le feature 
+      più importanti si basa sul presupposto che le feature più rilevanti 
+      per un determinato compito o problema presentano una maggiore variabilità rispetto alle feature meno rilevanti.
+      Pertanto, selezionando le feature con una varianza superiore a una soglia specificata, 
+      si tende a mantenere le feature che portano informazioni significative.
+
+      \subsection{Salvataggio dataset}
+      Il salvataggio delle feature estratte è stato implementato tramite Protocol Buffer (Protocolbuf),
+      è un meccanismo di serializzazione dei dati sviluppato da Google.
+      È un formato di scambio di dati binario che consente di definire la struttura 
+      dei dati in modo dichiarativo utilizzando un file di definizione del protocollo (.proto).
+      Questo file di definizione specifica i tipi di dati e i messaggi che possono essere trasmessi utilizzando Protobuf.
+
+      Protobuf offre diverse caratteristiche e vantaggi rispetto ad altri formati di serializzazione dei dati come XML e JSON.
+      Alcune delle caratteristiche principali di Protobuf includono:
+      \begin{itemize}
+        \item Efficienza: I dati serializzati con Protobuf sono più compatti rispetto ad altri formati come JSON o XML, risultando in dimensioni di dati più ridotte. Questo porta a un minor utilizzo dello spazio di archiviazione e una trasmissione più veloce dei dati su una rete.
+        \newpage
+        \item Velocità: La serializzazione e deserializzazione dei dati utilizzando Protobuf sono molto efficienti e veloci. I dati possono essere facilmente convertiti in un formato binario e viceversa, garantendo prestazioni elevate.
+        \item Interoperabilità: I file di definizione del protocollo (.proto) consentono di generare codice sorgente in diverse lingue di programmazione, inclusi C++, Java, Python, Dart e molti altri. Questo facilita l'interoperabilità tra diversi sistemi che utilizzano linguaggi di programmazione diversi.
+        \item Tipizzazione forte: Protobuf definisce tipi di dati specifici nel file di definizione del protocollo, consentendo una tipizzazione forte durante la serializzazione e deserializzazione dei dati. Ciò offre un maggiore controllo sui dati trasmessi e contribuisce a ridurre gli errori di interpretazione dei dati.
+      \end{itemize}
+      \subsection{Match feature}
+
+      \newpage
+    \section{Estrazione maschera con Deep Learning}
+    \section{Backend SPIR}
     dsad
-    \subsection{Estrazione della maschera e della pinna del delfino}
-    \subsection{Estrazione delle feature e salvataggio del dataset}
-    \subsection{Match basato sulle feature estratte da SIFT}
-    \subsection{Architettura del sistema}
-    
-  \section{Approccio basato su OpenCV per l'estrazione delle maschere}
-    \subsection{Miglioramenti apportati al processo di ritaglio}
-    \subsection{Parallelismo e tempi di esecuzione ridotti}
-    \subsection{Riduzione dello spazio occupato dal dataset di feature estratte}
-    \subsection{Adozione di gRPC per il trasferimento dei dati}
-  \section{Approccio con deep learning per l'estrazione delle maschere}
-    \subsection{Implementazione di una rete neurale basata su U-Net}
-    \subsection{Utilizzo delle maschere per il ritaglio della pinna}
-  \section{Interfaccia utente e interazione}
-    \subsection{Creazione di un'interfaccia per l'interazione con il backend Python}
-    \subsection{Utilizzo di Flutter per sviluppare un'interfaccia multipiattaforma}
+    \section{Frontend SPIR}
 
 \chapter{Risultati sperimentali}
   \section{Valutazione dei risultati}
@@ -379,4 +401,6 @@ si tende a mantenere le feature che portano informazioni significative.
   \section{Codice per l'estrazione delle maschere con OpenCV}
   \section{Codice per l'interfaccia utente in Flutter}
 
+\bibliographystyle{plain}
+\bibliography{bibliography}
 \end{document}

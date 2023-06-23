@@ -1,0 +1,33 @@
+\begin{thebibliography}{1}
+
+\bibitem{alcantarilla2012fast}
+Pablo~F. Alcantarilla, Adrien Bartoli, and Andrew~J. Davison.
+\newblock Fast explicit diffusion for accelerated features in nonlinear scale
+  spaces.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  34(7):1281--1298, 2012.
+
+\bibitem{leutenegger2011brisk}
+Stefan Leutenegger, Margarita Chli, and Roland~Y. Siegwart.
+\newblock Brisk: Binary robust invariant scalable keypoints.
+\newblock In {\em Proceedings of the IEEE International Conference on Computer
+  Vision (ICCV)}, pages 2548--2555. IEEE, 2011.
+
+\bibitem{lowe2004distinctive}
+David~G. Lowe.
+\newblock Distinctive image features from scale-invariant keypoints.
+\newblock {\em International journal of computer vision}, 60(2):91--110, 2004.
+
+\bibitem{otsu1979threshold}
+Nobuyuki Otsu.
+\newblock A threshold selection method from gray-level histograms.
+\newblock {\em IEEE Transactions on Systems, Man, and Cybernetics},
+  9(1):62--66, 1979.
+
+\bibitem{rublee2011orb}
+Ethan Rublee, Vincent Rabaud, Kurt Konolige, and Gary Bradski.
+\newblock Orb: an efficient alternative to sift or surf.
+\newblock {\em International Conference on Computer Vision (ICCV)}, pages
+  2564--2571, 2011.
+
+\end{thebibliography}
