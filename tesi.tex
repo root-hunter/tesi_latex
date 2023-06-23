@@ -11,6 +11,7 @@
 \usepackage{tikz}
 \usepackage{caption}
 \usepackage{listings}
+\usepackage{enumitem}
 
 
 
@@ -161,7 +162,8 @@ prepare_images_vlfeat.m
       a differenza di matlab OpenCV utilizza il formato BGR, ovvero il vettore dei colori per ogni pixel è invertito,
       dall'immagine convertita in spazio colore CIELAB si estrae il canale B dall'immagine questo permette di mettere in evidenza 
       le aree blu dell'immagine così da isolare la parte di mare presente nello sfondo delle foto.
-      \\\\\\La sogliatura di Otsu, chiamata anche metodo di Otsu, è un algoritmo utilizzato per determinare automaticamente il valore di soglia ottimale per la segmentazione di un'immagine in bianco e nero.
+      \newpage
+      La sogliatura di Otsu, chiamata anche metodo di Otsu, è un algoritmo utilizzato per determinare automaticamente il valore di soglia ottimale per la segmentazione di un'immagine in bianco e nero.
       L'obiettivo della sogliatura è quello di separare i pixel dell'immagine in due classi, generalmente il primo piano (oggetti di interesse) e lo sfondo.
       \begin{figure}
         \centering
@@ -199,7 +201,6 @@ b = im_lab[:,:,2]
 thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
       \end{lstlisting}
 
-
         L'algoritmo di Otsu calcola la soglia ottimale in base all'istogramma dei livelli di grigio dell'immagine.
         L'istogramma rappresenta la distribuzione dei valori di grigio presenti nell'immagine.
         \newpage
@@ -228,7 +229,47 @@ thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
           
         \end{flushleft}
       \end{figure}
-      Una volta fatto questo 
+      Una volta prodotta la prima maschera grazie al metodo OTSU, 
+      si passa all'eliminazione dei buchi mediante l'utilizzo di operatori
+      morfologici e alla rimozione di segmenti slegati dall'area della pinna.
+      Nello specifico gli operatori morfologici utilizzati per l'elimiazione dei buchi sono stati:
+      \begin{itemize}
+        \item Dilatazione (Dilation): L'operazione di dilatazione viene utilizzata per \\espandere le regioni di pixel bianchi nell'immagine. In sostanza, ogni pixel bianco nell'immagine di input viene "gonfiato" e riempito con pixel bianchi circostanti. Ciò ha l'effetto di aumentare le dimensioni dell'oggetto o delle strutture bianche nell'immagine. L'operazione di dilatazione è utile per riempire eventuali buchi o lacune all'interno delle regioni, connettere regioni separate o aumentare la dimensione degli oggetti.
+        \item Chiusura (Closing): L'operazione di chiusura combina l'erosione seguita dalla dilatazione per rimuovere piccoli buchi o aree isolate all'interno delle regioni bianche dell'immagine. Inizialmente, l'operazione di erosione viene applicata per ridurre le dimensioni delle regioni bianche e rimuovere dettagli indesiderati. Successivamente, l'operazione di dilatazione viene applicata per riempire i buchi e ricongiungere le regioni vicine che potrebbero essere state separate durante l'erosione. L'operazione di chiusura è utile per ridurre il rumore, migliorare la coerenza delle regioni e completare le forme degli oggetti.
+      \end{itemize}
+      \newpage
+      \begin{lstlisting}
+#Trova i contorni nell'immagine binaria
+contours, _ = cv2.findContours(im_thr, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
+biggest_area = -1;
+biggest = None;
+
+for contour in contours:
+    #Viene calcolata l'area del contorno
+    area = cv2.contourArea(contour);
+
+    #Salvataggio del contorno con l'area maggiore
+    if biggest_area < area:
+        biggest_area = area;
+        biggest = contour;
+
+#Disegno la maschera del contorno maggiore sulla maschera originale con una tonalità di grigio diversa
+mask_colored = cv2.drawContours(im_thr, [biggest], -1, 80, -1);
+_, binary_image = cv2.threshold(mask_colored, 254, 255, cv2.THRESH_BINARY_INV)
+
+#Estraggo la maschera del contorno maggiore
+mask = cv2.bitwise_and(mask_colored, mask_colored, mask=binary_image)
+
+kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5,5))
+
+#Applico operatori morfologici per eliminare eventuali buchi nella maschera
+mask = cv2.morphologyEx(mask, cv2.MORPH_DILATE, kernel=kernel, iterations=1)
+mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel=kernel, iterations=1)
+
+#Applico la maschera all'immagine originale per estrarre la pinna
+fin = cv2.bitwise_and(image, image, mask=mask)
+      \end{lstlisting}
       
     \subsection{Backend SPIR}
     dsad
