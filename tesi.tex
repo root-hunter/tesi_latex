@@ -169,17 +169,17 @@ prepare_images_vlfeat.m
       \begin{figure}
         \centering
         
-        \begin{minipage}{0.25\textwidth}
+        \begin{minipage}{0.3\textwidth}
           \centering
           \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_original.png}  
           \caption{Immagine originale}
         \end{minipage}
-        \begin{minipage}{0.25\textwidth}
+        \begin{minipage}{0.3\textwidth}
           \centering
           \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_lab.png}   
           \caption{Immagine CIELAB}
         \end{minipage}
-        \begin{minipage}{0.25\textwidth}
+        \begin{minipage}{0.3\textwidth}
           \centering
           \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_b.png}  
           \caption{Canale B estratto}
@@ -188,7 +188,7 @@ prepare_images_vlfeat.m
         
       \end{figure}
 
-      \begin{lstlisting}
+\begin{lstlisting}
 #Caricamento immagine originale
 image = cv2.imread("BEN_180713_4.png")
 
@@ -200,7 +200,7 @@ b = im_lab[:,:,2]
 
 # Applico il metodo di Otsu al canale B
 thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-      \end{lstlisting}
+\end{lstlisting}
 
         L'algoritmo di Otsu calcola la soglia ottimale in base all'istogramma dei livelli di grigio dell'immagine.
         L'istogramma rappresenta la distribuzione dei valori di grigio presenti nell'immagine.
@@ -211,17 +211,17 @@ thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
       \begin{figure}
         \centering
-        \begin{minipage}{0.25\textwidth}
+        \begin{minipage}{0.3\textwidth}
           \centering
           \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_thr_b.png}   
           \caption{Metodo OTSU}
         \end{minipage}
-        \begin{minipage}{0.25\textwidth}
+        \begin{minipage}{0.3\textwidth}
           \centering
           \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_mask1.png}  
-          \caption{Operatori morfologici e pulizia}
+          \caption{Operatori morfologici e rimozione segmenti}
         \end{minipage}
-        \begin{minipage}{0.25\textwidth}
+        \begin{minipage}{0.3\textwidth}
           \centering
           \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_out.png}   
           \caption{Pinna estratta}
@@ -236,6 +236,7 @@ thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
       Nello specifico gli operatori morfologici utilizzati per l'elimiazione dei buchi sono stati:
       \begin{itemize}
         \item Dilatazione (Dilation): L'operazione di dilatazione viene utilizzata per \\espandere le regioni di pixel bianchi nell'immagine. In sostanza, ogni pixel bianco nell'immagine di input viene "gonfiato" e riempito con pixel bianchi circostanti. Ciò ha l'effetto di aumentare le dimensioni dell'oggetto o delle strutture bianche nell'immagine. L'operazione di dilatazione è utile per riempire eventuali buchi o lacune all'interno delle regioni, connettere regioni separate o aumentare la dimensione degli oggetti.
+        \newpage
         \item Chiusura (Closing): L'operazione di chiusura combina l'erosione seguita dalla dilatazione per rimuovere piccoli buchi o aree isolate all'interno delle regioni bianche dell'immagine. Inizialmente, l'operazione di erosione viene applicata per ridurre le dimensioni delle regioni bianche e rimuovere dettagli indesiderati. Successivamente, l'operazione di dilatazione viene applicata per riempire i buchi e ricongiungere le regioni vicine che potrebbero essere state separate durante l'erosione. L'operazione di chiusura è utile per ridurre il rumore, migliorare la coerenza delle regioni e completare le forme degli oggetti.
       \end{itemize}
       \begin{figure}[H]
@@ -258,16 +259,16 @@ thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
       \end{figure}
      
       Per quanto riguarda l'eliminazione di segmenti non appartenenti all'area della pinna del delfino
-      è stato scritto un semplice algoritmo che si basa sul trovare tutti i segmenti separati all'interno della maschera,
-      cercare il maggiore in base all'area del segmento e poi rimuovere tutto il resto dalla maschera, 
+      è stato scritto un algoritmo che si basa sul trovare tutti i segmenti separati all'interno della maschera,
+      cercare quello con l'area maggiore e poi rimuovere tutto il resto dalla maschera, 
       questa operazione viene ripetuta sia prima che dopo l'utilizzo degli operatori morfologici, con il fine di
       eliminare eventuali scarti dell'erosione o del metodo OTSU.
       
   
       
       \newpage
-      \begin{lstlisting}
-#Trova i contorni nell'immagine binaria
+\begin{lstlisting}
+#Trova i contorni nella maschera
 contours, _ = cv2.findContours(im_thr, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
 biggest_area = -1;
@@ -299,8 +300,50 @@ mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel=kernel, iterations=1)
 #...
 #Applico la maschera all'immagine originale per estrarre la pinna
 fin = cv2.bitwise_and(image, image, mask=mask)
-      \end{lstlisting}
-      
+\end{lstlisting}
+
+      A questo punto la maschera della pinna del delfino è stata estratta, 
+      ora si può passare alla fase di feature extraction, nello specifico l'algoritmo utilizzato 
+      è Scale Invariant Feature Transform (SIFT), lo stesso della versione MATLAB,
+      anche se nel corso dello sviluppo sono stati testati i seguenti algorimti di feature extraction:
+      \begin{itemize}
+        \item SIFT (Scale-Invariant Feature Transform): L'algoritmo SIFT è ampiamente utilizzato per estrarre feature invarianti rispetto alla scala e alla rotazione. Rileva punti di interesse in un'immagine, calcola le loro descrizioni basate su gradienti di intensità e crea una rappresentazione compatta delle feature. SIFT è noto per la sua robustezza rispetto alle variazioni di scala, rotazione, illuminazione e occlusioni.
+        \item ORB (Oriented FAST and Rotated BRIEF): L'algoritmo ORB combina le caratteristiche di rilevazione rapida degli angoli (FAST) e il descrittore binario BRIEF. È un algoritmo efficiente che estrae feature invarianti rispetto alla scala e all'orientazione. ORB utilizza un rilevatore di angoli per individuare punti di interesse, calcola gli orientamenti locali e genera descrittori binari per le feature.
+        \item BRISK (Binary Robust Invariant Scalable Keypoints): L'algoritmo BRISK è un metodo basato su descrittori binari che utilizza un rilevatore adattativo di punti di interesse. BRISK calcola un set di punti di interesse utilizzando un rilevatore adattativo basato su una rappresentazione piramidale dell'immagine. Successivamente, calcola i descrittori binari basati su informazioni di intensità e orientazione.
+        \item AKAZE (Accelerated-KAZE): L'algoritmo AKAZE è una variante accelerata dell'algoritmo KAZE, che a sua volta si basa sulla rilevazione di blob multiscale e sul calcolo di descrittori basati su regioni. AKAZE è noto per la sua robustezza alle variazioni di scala, rotazione, rumore e cambiamenti di illuminazione.
+      \end{itemize}
+      \newpage
+\begin{lstlisting}
+#La pinna estratta viene convertita in scala di grigi
+gray_fin = cv2.cvtColor(fin, cv2.COLOR_BGR2GRAY)
+
+#Vengono estratti keypoint e descrittori
+#In modo analogo si estraggone le feature con ORB, BRISK e AKAZE
+sift = cv2.SIFT_create()
+sift_keypoints, sift_descriptors = sift.detectAndCompute(gray_fin, None)
+
+# Calcola la varianza dei descrittori
+variances = np.var(sift_descriptors, axis=1)
+
+# Soglia per la varianza per selezionare le feature importanti
+variance_threshold = 0.1
+
+# Seleziona solo le feature con varianza superiore alla soglia
+selected_indices = np.where(variances > variance_threshold)[0]
+sift_keypoints = [sift_keypoints[i] for i in selected_indices]
+sift_descriptors = sift_descriptors[selected_indices]
+\end{lstlisting}
+L'utilizzo della varianza come criterio per la selezione delle feature si basa su una considerazione matematica fondamentale:
+la varianza misura la dispersione dei dati intorno alla loro media.
+In termini di feature extraction, la varianza può essere utilizzata 
+per valutare quanto le feature variano all'interno di un set di dati.
+Feature con varianza alta indicano una maggiore variabilità dei valori,
+mentre feature con varianza bassa indicano una minore variabilità dei valori.
+L'idea di utilizzare la varianza per selezionare le feature 
+più importanti si basa sul presupposto che le feature più rilevanti 
+per un determinato compito o problema presentano una maggiore variabilità rispetto alle feature meno rilevanti.
+Pertanto, selezionando le feature con una varianza superiore a una soglia specificata, 
+si tende a mantenere le feature che portano informazioni significative.
     \subsection{Backend SPIR}
     dsad
     \subsection{Estrazione della maschera e della pinna del delfino}
