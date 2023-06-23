@@ -132,7 +132,7 @@
       di fondamentale importanza al fine di ottimizzare l'area di estrazione delle features, l'estrazione delle maschere viene fatta
       nel metodo 
       \begin{verbatim}
-        prepare_images_vlfeat.m
+prepare_images_vlfeat.m
       \end{verbatim}
       \begin{figure}
         \centering
@@ -156,6 +156,12 @@
       Lab include tutti i colori percepibili, perciò include completamente i gamut degli 
       spazi colore RGB e CMYK ed è indipendente dal dispositivo che li rappresenta.
       
+      Come nella versione originale il primo passo è convertire l'immagine da RGB a CIELAB, 
+      a differenza di matlab OpenCV utilizza il formato BGR, ovvero il vettore dei colori per ogni pixel è invertito,
+      dall'immagine convertita in spazio colore CIELAB si estrae il canale B dall'immagine questo permette di mettere in evidenza 
+      le aree blu dell'immagine così da isolare la parte di mare presente nello sfondo delle foto.
+      \\\\\\La sogliatura di Otsu, chiamata anche metodo di Otsu, è un algoritmo utilizzato per determinare automaticamente il valore di soglia ottimale per la segmentazione di un'immagine in bianco e nero.
+      L'obiettivo della sogliatura è quello di separare i pixel dell'immagine in due classi, generalmente il primo piano (oggetti di interesse) e lo sfondo.
       \begin{figure}
         \centering
         
@@ -175,13 +181,10 @@
           \caption{Canale B estratto}
         \end{minipage}
 
-        \begin{flushleft}
-          Come nella versione originale il primo passo è convertire l'immagine da RGB a CIELAB, 
-          a differenza di matlab OpenCV utilizza il formato BGR, ovvero il vettore dei colori per ogni pixel è invertito,
-          dall'immagine convertita in spazio colore CIELAB si estrae il canale B dall'immagine questo permette di mettere in evidenza 
-          le aree blu dell'immagine così da isolare la parte di mare presente nello sfondo delle foto.
-          
-        \begin{lstlisting}
+        
+      \end{figure}
+
+      \begin{lstlisting}
 #Caricamento immagine originale
 image = cv2.imread("BEN_180713_4.png")
 
@@ -191,19 +194,15 @@ im_lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
 #Estrazione del canale B
 b = im_lab[:,:,2]
 
-# Applica il metodo di Otsu al canale B
+# Applico il metodo di Otsu al canale B
 thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-          \end{lstlisting}
+      \end{lstlisting}
 
-          La sogliatura di Otsu, chiamata anche metodo di Otsu, è un algoritmo utilizzato per determinare automaticamente il valore di soglia ottimale per la segmentazione di un'immagine in bianco e nero.
-          L'obiettivo della sogliatura è quello di separare i pixel dell'immagine in due classi, generalmente il primo piano (oggetti di interesse) e lo sfondo.
-          \\
-          L'algoritmo di Otsu calcola la soglia ottimale in base all'istogramma dei livelli di grigio dell'immagine.
-          L'istogramma rappresenta la distribuzione dei valori di grigio presenti nell'immagine.
-          L'obiettivo è trovare la soglia che massimizza la varianza tra le due classi (primo piano e sfondo), considerando anche la distribuzione dei pixel di ciascuna classe. In altre parole, si cerca la soglia che massimizza la separazione tra i due gruppi di pixel.
 
-        \end{flushleft}
-      \end{figure}
+        L'algoritmo di Otsu calcola la soglia ottimale in base all'istogramma dei livelli di grigio dell'immagine.
+        L'istogramma rappresenta la distribuzione dei valori di grigio presenti nell'immagine.
+        L'obiettivo è trovare la soglia che massimizza la varianza tra le due classi (primo piano e sfondo), 
+        considerando anche la distribuzione dei pixel di ciascuna classe. In altre parole, si cerca la soglia che massimizza la separazione tra i due gruppi di pixel.
 
       \begin{figure}
         \centering
@@ -222,9 +221,14 @@ thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
           \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_out.png}   
           \caption{Pinna estratta}
         \end{minipage}
+        \begin{flushleft}
+          
+        \end{flushleft}
       \end{figure}
-
-      \subsection{Utilizzo di Python come linguaggio per backend di SPIR}
+      Una volta fatto questo 
+      
+    \subsection{Backend SPIR}
+    dsad
     \subsection{Estrazione della maschera e della pinna del delfino}
     \subsection{Estrazione delle feature e salvataggio del dataset}
     \subsection{Match basato sulle feature estratte da SIFT}
