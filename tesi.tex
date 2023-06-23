@@ -7,6 +7,19 @@
 \usepackage{setspace}
 \usepackage{titlesec}
 \usepackage{fontspec}
+\usepackage{subfig}
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{listings}
+
+
+
+\captionsetup{
+  font=small, % Imposta il font delle didascalie come "small" (piccolo)
+  justification=centering, % Allinea le didascalie al centro
+  singlelinecheck=false, % Permette alle didascalie di occupare più righe se necessario
+  skip=5pt % Aggiunge uno spazio verticale di 5pt tra la figura e la didascalia
+}
 
 \setmainfont{Calibri}
 
@@ -16,6 +29,20 @@
   right=3cm,
   top=4cm,
   bottom=4cm,
+}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!40!black},
+    stringstyle=\color{orange},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    captionpos=b
 }
 
 \titleformat{\section}
@@ -84,10 +111,120 @@
 
 \chapter{Metodi}
   \section{Porting del sistema SPIR}
+    In una prima fase di analisi di SPIR (MATLAB) si nota che l'interazione è confinata
+    a linea di comando (CLI), in ottica di offrire le funzionalità di SPIR a una più ampia
+    fascia di utenza, mantendo anche la possibilità di usufruire del codice sorgente 
+    da parte di utenti più esperti si è optato per una implementazione basata su client/server,
+    in particolare slegando le componenti di interazione e logica del sistema si ha la possibilità
+    di utilizzare le tecnologie più apporpriate a seconda del contesto, per poi mettere in comunicazione le 
+    varie componenti.
     \subsection{Riscrittura dell'algoritmo originale (MATLAB) in Python}
-    In una prima fase di analisi del codice sorgente di SPIR (MATLAB) si nota come esso utilizzi
-    
-    \subsection{Utilizzo di Python come linguaggio per backend di SPIR}
+      Lo sviluppo si è concentrato inizialmente sulla riscrittura delle funzionalità principali di SPIR,
+      come linguaggio è stato scelto Python per i seguenti motivi:
+      \begin{itemize}
+        \item Vasta gamma di librerie disponibili.
+        \item Utilizzo di OpenCV per l'elaborazione delle immagini.
+        \item Buona diffusione in ambito scientifico.
+        \item Supporto attivo dalla community di sviluppatori.
+      \end{itemize}
+
+      La prima funzionalità presa in analisi per il porting è stata l'estrazione delle maschere dalle immagini,
+      di fondamentale importanza al fine di ottimizzare l'area di estrazione delle features, l'estrazione delle maschere viene fatta
+      nel metodo 
+      \begin{verbatim}
+        prepare_images_vlfeat.m
+      \end{verbatim}
+      \begin{figure}
+        \centering
+        
+        \begin{minipage}{0.35\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/cielab2.jpg}  
+          \caption{CIELAB 2D}
+        \end{minipage}
+        \begin{minipage}{0.35\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/cielab1.jpg}   
+          \caption{CIELAB 3D}
+        \end{minipage}
+      \end{figure}
+
+      L'immagine viene convertita nello spazio colore Cielab, è uno spazio \\
+      colore-opponente con la dimensione L per la luminosità e a e b per le dimensioni colore-opponente,
+      basato sulle coordinate dello spazio colore non lineare compresso CIE XYZ.
+      La luminosità è calcolata usando la radice cubica della luminanza relativa. 
+      Lab include tutti i colori percepibili, perciò include completamente i gamut degli 
+      spazi colore RGB e CMYK ed è indipendente dal dispositivo che li rappresenta.
+      
+      \begin{figure}
+        \centering
+        
+        \begin{minipage}{0.25\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_original.png}  
+          \caption{Immagine originale}
+        \end{minipage}
+        \begin{minipage}{0.25\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_lab.png}   
+          \caption{Immagine CIELAB}
+        \end{minipage}
+        \begin{minipage}{0.25\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_b.png}  
+          \caption{Canale B estratto}
+        \end{minipage}
+
+        \begin{flushleft}
+          Come nella versione originale il primo passo è convertire l'immagine da RGB a CIELAB, 
+          a differenza di matlab OpenCV utilizza il formato BGR, ovvero il vettore dei colori per ogni pixel è invertito,
+          dall'immagine convertita in spazio colore CIELAB si estrae il canale B dall'immagine questo permette di mettere in evidenza 
+          le aree blu dell'immagine così da isolare la parte di mare presente nello sfondo delle foto.
+          
+        \begin{lstlisting}
+#Caricamento immagine originale
+image = cv2.imread("BEN_180713_4.png")
+
+#Conversione immagine in spazio colore CIELAB
+im_lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+
+#Estrazione del canale B
+b = im_lab[:,:,2]
+
+# Applica il metodo di Otsu al canale B
+thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+          \end{lstlisting}
+
+          La sogliatura di Otsu, chiamata anche metodo di Otsu, è un algoritmo utilizzato per determinare automaticamente il valore di soglia ottimale per la segmentazione di un'immagine in bianco e nero.
+          L'obiettivo della sogliatura è quello di separare i pixel dell'immagine in due classi, generalmente il primo piano (oggetti di interesse) e lo sfondo.
+          \\
+          L'algoritmo di Otsu calcola la soglia ottimale in base all'istogramma dei livelli di grigio dell'immagine.
+          L'istogramma rappresenta la distribuzione dei valori di grigio presenti nell'immagine.
+          L'obiettivo è trovare la soglia che massimizza la varianza tra le due classi (primo piano e sfondo), considerando anche la distribuzione dei pixel di ciascuna classe. In altre parole, si cerca la soglia che massimizza la separazione tra i due gruppi di pixel.
+
+        \end{flushleft}
+      \end{figure}
+
+      \begin{figure}
+        \centering
+        \begin{minipage}{0.25\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_thr_b.png}   
+          \caption{Metodo OTSU}
+        \end{minipage}
+        \begin{minipage}{0.25\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_mask1.png}  
+          \caption{Operatori morfologici e pulizia}
+        \end{minipage}
+        \begin{minipage}{0.25\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_out.png}   
+          \caption{Pinna estratta}
+        \end{minipage}
+      \end{figure}
+
+      \subsection{Utilizzo di Python come linguaggio per backend di SPIR}
     \subsection{Estrazione della maschera e della pinna del delfino}
     \subsection{Estrazione delle feature e salvataggio del dataset}
     \subsection{Match basato sulle feature estratte da SIFT}
