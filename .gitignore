@@ -8,3 +8,5 @@
 *.run.*
 *.bcf
 *.pdf
+*.bbl
+*.blg

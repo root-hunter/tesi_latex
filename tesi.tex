@@ -143,12 +143,12 @@ prepare_images_vlfeat.m
         
         \begin{minipage}{0.35\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/cielab2.jpg}  
+          \includegraphics[width=\textwidth]{assets/images/cielab/cielab2.jpg}  
           \caption{Spazio colore CIELAB in 2D}
         \end{minipage}
         \begin{minipage}{0.35\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/cielab1.jpg}   
+          \includegraphics[width=\textwidth]{assets/images/cielab/cielab1.jpg}   
           \caption{Spazio colore CIELAB in 3D}
         \end{minipage}
       \end{figure}
@@ -402,6 +402,7 @@ sift_descriptors = sift_descriptors[selected_indices]
         \item Interoperabilità: I file di definizione del protocollo (.proto) consentono di generare codice sorgente in diverse lingue di programmazione, inclusi C++, Java, Python, Dart e molti altri. Questo facilita l'interoperabilità tra diversi sistemi che utilizzano linguaggi di programmazione diversi.
         \item Tipizzazione forte: Protobuf definisce tipi di dati specifici nel file di definizione del protocollo, consentendo una tipizzazione forte durante la serializzazione e deserializzazione dei dati. Ciò offre un maggiore controllo sui dati trasmessi e contribuisce a ridurre gli errori di interpretazione dei dati.
       \end{itemize}
+      \newpage
       \subsection{Match feature}
       Dopo il salvataggio del dataset contenente tutti i keypoint e descrittori 
       \\ per ogni immagine, raggruppati per nome di delfino si è passato ad implementare il match con OpenCV,
