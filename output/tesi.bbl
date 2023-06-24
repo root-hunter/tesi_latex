@@ -7,6 +7,11 @@ Pablo~F. Alcantarilla, Adrien Bartoli, and Andrew~J. Davison.
 \newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
   34(7):1281--1298, 2012.
 
+\bibitem{opencv_library}
+Gary Bradski.
+\newblock Opencv: Open source computer vision library.
+\newblock {\em Dr. Dobb's Journal of Software Tools}, 3(33):120--123, 2000.
+
 \bibitem{leutenegger2011brisk}
 Stefan Leutenegger, Margarita Chli, and Roland~Y. Siegwart.
 \newblock Brisk: Binary robust invariant scalable keypoints.

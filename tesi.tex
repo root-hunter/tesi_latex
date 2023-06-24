@@ -127,11 +127,11 @@
       come linguaggio è stato scelto Python per i seguenti motivi:
       \begin{itemize}
         \item Vasta gamma di librerie per la manipolazione di immagini disponibili.
-        \item Utilizzo di OpenCV per l'elaborazione delle immagini.
+        \item Utilizzo di OpenCV \cite{opencv_library} per l'elaborazione delle immagini.
         \item Buona diffusione in ambito scientifico.
         \item Supporto attivo dalla community di sviluppatori.
       \end{itemize}
-
+      
       La prima funzionalità presa in analisi per il porting è stata l'estrazione delle maschere dalle immagini,
       di fondamentale importanza al fine di ottimizzare l'area di estrazione delle features, l'estrazione delle maschere viene fatta
       nel metodo 
@@ -299,8 +299,34 @@ mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel=kernel, iterations=1)
 #Applico la maschera all'immagine originale per estrarre la pinna
 fin = cv2.bitwise_and(image, image, mask=mask)
 \end{lstlisting}
+    \subsection{Controllo qualità}
+    Per migliorare la qualità complessiva delle immagini passate alla fase di feature extraction,
+    si sceglie di porre diversi livelli di filtraggio con relativi parametri soglia,
+    un primo controllo viene effetuato sulla maschera generata, ovvero, se 
+    dopo tutti i passaggi di ottimizzazione della maschera (compresa l'eliminazione di
+    segmenti), l'area della maschera non rispetta la seguente disequazione:
+    \begin{minipage}{1\textwidth}
+      \centering
+      $minFinArea$ < $finArea$ < $maxFinArea$
+    \end{minipage}
+    Allora l'immagine sarà scartata dato che sicuramente l'estrazione della maschera
+    non avrà correttamente segmentato la pinna del delfino, sia in caso di eccesso o assenza di area.
+    \begin{figure}[H]
+      \centering
+      \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/quality_control/less.png}  
+        \caption{\\$finArea$ < $minFinArea$}
+      \end{minipage}
+      \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/quality_control/too.png}   
+        \caption{\\$maxFinArea$ < $finArea$}
+      \end{minipage}
+    \end{figure}
     \subsection{Estrazione feature}
     \begin{figure}[H]
+      
       \centering
       \begin{minipage}{0.3\textwidth}
         \centering
@@ -318,17 +344,17 @@ fin = cv2.bitwise_and(image, image, mask=mask)
         \caption{Feature estratte}
       \end{minipage}
     \end{figure}
-      A questo punto la maschera della pinna del delfino è stata estratta, 
-      ora si può passare alla fase di feature extraction, nello specifico l'algoritmo utilizzato 
-      è Scale Invariant Feature Transform (SIFT), lo stesso della versione MATLAB,
-      anche se nel corso dello sviluppo sono stati testati i seguenti algorimti di feature extraction:
-      \begin{itemize}
-        \item SIFT (Scale-Invariant Feature Transform \cite{lowe2004distinctive}): L'algoritmo SIFT è ampiamente utilizzato per estrarre feature invarianti rispetto alla scala e alla rotazione. Rileva punti di interesse in un'immagine, calcola le loro descrizioni basate su gradienti di intensità e crea una rappresentazione compatta delle feature. SIFT è noto per la sua robustezza rispetto alle variazioni di scala, rotazione, illuminazione e occlusioni.
-        \item ORB (Oriented FAST and Rotated BRIEF \cite{rublee2011orb}): L'algoritmo ORB combina le caratteristiche di rilevazione rapida degli angoli (FAST) e il descrittore binario BRIEF. È un algoritmo efficiente che estrae feature invarianti rispetto alla scala e all'orientazione. ORB utilizza un rilevatore di angoli per individuare punti di interesse, calcola gli orientamenti locali e genera descrittori binari per le feature.
-        \newpage
-        \item BRISK (Binary Robust Invariant Scalable Keypoints \cite{leutenegger2011brisk}): L'algoritmo BRISK è un metodo basato su descrittori binari che utilizza un rilevatore adattativo di punti di interesse. BRISK calcola un set di punti di interesse utilizzando un rilevatore adattativo basato su una rappresentazione piramidale dell'immagine. Successivamente, calcola i descrittori binari basati su informazioni di intensità e orientazione.
-        \item AKAZE (Accelerated-KAZE \cite{alcantarilla2012fast}): L'algoritmo AKAZE è una variante accelerata dell'algoritmo KAZE, che a sua volta si basa sulla rilevazione di blob multiscale e sul calcolo di descrittori basati su regioni. AKAZE è noto per la sua robustezza alle variazioni di scala, rotazione, rumore e cambiamenti di illuminazione.
-      \end{itemize}
+    A questo punto la maschera della pinna del delfino è stata estratta, 
+    ora si può passare alla fase di feature extraction, nello specifico l'algoritmo utilizzato 
+    è Scale Invariant Feature Transform (SIFT), lo stesso della versione MATLAB,
+    anche se nel corso dello sviluppo sono stati testati i seguenti algorimti di feature extraction:
+    \begin{itemize}
+      \item SIFT (Scale-Invariant Feature Transform \cite{lowe2004distinctive}): L'algoritmo SIFT è ampiamente utilizzato per estrarre feature invarianti rispetto alla scala e alla rotazione. Rileva punti di interesse in un'immagine, calcola le loro descrizioni basate su gradienti di intensità e crea una rappresentazione compatta delle feature. SIFT è noto per la sua robustezza rispetto alle variazioni di scala, rotazione, illuminazione e occlusioni.
+      \item ORB (Oriented FAST and Rotated BRIEF \cite{rublee2011orb}): L'algoritmo ORB combina le caratteristiche di rilevazione rapida degli angoli (FAST) e il descrittore binario BRIEF. È un algoritmo efficiente che estrae feature invarianti rispetto alla scala e all'orientazione. ORB utilizza un rilevatore di angoli per individuare punti di interesse, calcola gli orientamenti locali e genera descrittori binari per le feature.
+      \newpage
+      \item BRISK (Binary Robust Invariant Scalable Keypoints \cite{leutenegger2011brisk}): L'algoritmo BRISK è un metodo basato su descrittori binari che utilizza un rilevatore adattativo di punti di interesse. BRISK calcola un set di punti di interesse utilizzando un rilevatore adattativo basato su una rappresentazione piramidale dell'immagine. Successivamente, calcola i descrittori binari basati su informazioni di intensità e orientazione.
+      \item AKAZE (Accelerated-KAZE \cite{alcantarilla2012fast}): L'algoritmo AKAZE è una variante accelerata dell'algoritmo KAZE, che a sua volta si basa sulla rilevazione di blob multiscale e sul calcolo di descrittori basati su regioni. AKAZE è noto per la sua robustezza alle variazioni di scala, rotazione, rumore e cambiamenti di illuminazione.
+    \end{itemize}
 \begin{lstlisting}
 #La pinna estratta viene convertita in scala di grigi
 gray_fin = cv2.cvtColor(fin, cv2.COLOR_BGR2GRAY)
@@ -360,7 +386,6 @@ sift_descriptors = sift_descriptors[selected_indices]
       per un determinato compito o problema presentano una maggiore variabilità rispetto alle feature meno rilevanti.
       Pertanto, selezionando le feature con una varianza superiore a una soglia specificata, 
       si tende a mantenere le feature che portano informazioni significative.
-
       \subsection{Salvataggio dataset}
       Il salvataggio delle feature estratte è stato implementato tramite Protocol Buffer (Protocolbuf),
       è un meccanismo di serializzazione dei dati sviluppato da Google.
@@ -378,6 +403,27 @@ sift_descriptors = sift_descriptors[selected_indices]
         \item Tipizzazione forte: Protobuf definisce tipi di dati specifici nel file di definizione del protocollo, consentendo una tipizzazione forte durante la serializzazione e deserializzazione dei dati. Ciò offre un maggiore controllo sui dati trasmessi e contribuisce a ridurre gli errori di interpretazione dei dati.
       \end{itemize}
       \subsection{Match feature}
+      Dopo il salvataggio del dataset contenente tutti i keypoint e descrittori 
+      \\ per ogni immagine, raggruppati per nome di delfino si è passato ad implementare il match con OpenCV,
+      \begin{lstlisting}
+bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
+
+# Match descriptors of the two images
+matches: list[cv2.DMatch] = bf.match(dp1, dp2)
+
+# Sort the matches by distance
+matches = sorted(matches, key=lambda x: x.distance)
+
+# Set a threshold for selecting good matches
+
+if N > 0:
+  matches = matches[:N]
+
+good_matches = [m for m in matches if m.distance < thresh]
+
+match_img = cv2.drawMatches(img1, kp1, img2, kp2, matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+
+      \end{lstlisting}
 
       \newpage
     \section{Estrazione maschera con Deep Learning}
