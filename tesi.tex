@@ -143,12 +143,12 @@ prepare_images_vlfeat.m
         
         \begin{minipage}{0.35\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/cielab/cielab2.jpg}  
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/cielab/cielab2.jpg}  
           \caption{Spazio colore CIELAB in 2D}
         \end{minipage}
         \begin{minipage}{0.35\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/cielab/cielab1.jpg}   
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/cielab/cielab1.jpg}   
           \caption{Spazio colore CIELAB in 3D}
         \end{minipage}
       \end{figure}
@@ -172,17 +172,17 @@ prepare_images_vlfeat.m
         
         \begin{minipage}{0.3\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_original.png}  
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/fin_extraction/test_original.png}  
           \caption{Immagine originale}
         \end{minipage}
         \begin{minipage}{0.3\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_lab.png}   
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/fin_extraction/test_lab.png}   
           \caption{Immagine CIELAB}
         \end{minipage}
         \begin{minipage}{0.3\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_b.png}  
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/fin_extraction/test_b.png}  
           \caption{Canale B estratto}
         \end{minipage}
 
@@ -213,17 +213,17 @@ thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         \centering
         \begin{minipage}{0.3\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_thr_b.png}   
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/fin_extraction/test_thr_b.png}   
           \caption{Metodo OTSU}
         \end{minipage}
         \begin{minipage}{0.3\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_mask1.png}  
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/fin_extraction/test_mask1.png}  
           \caption{Operatori morfologici e rimozione segmenti}
         \end{minipage}
         \begin{minipage}{0.3\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/fin_extraction/test_out.png}   
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/fin_extraction/test_out.png}   
           \caption{Pinna estratta}
         \end{minipage}
         \begin{flushleft}
@@ -243,17 +243,17 @@ thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         \centering
         \begin{minipage}{0.3\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/alg_area/original.png}   
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/alg_area/original.png}   
           \caption{Maschera originale}
         \end{minipage}
         \begin{minipage}{0.3\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/alg_area/find.png}  
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/alg_area/find.png}  
           \caption{Divisione in segmenti}
         \end{minipage}
         \begin{minipage}{0.3\textwidth}
           \centering
-          \includegraphics[width=\textwidth]{assets/images/alg_area/clear.png}   
+          \includegraphics[width=\textwidth]{assets/images/methods/porting/alg_area/clear.png}   
           \caption{Rimozione segmenti minori}
         \end{minipage}
       \end{figure}
@@ -304,17 +304,17 @@ fin = cv2.bitwise_and(image, image, mask=mask)
       \centering
       \begin{minipage}{0.3\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{assets/images/quality_control/blur.png}  
+        \includegraphics[width=\textwidth]{assets/images/methods/porting/quality_control/blur.png}  
         \caption{Foto sfocata (Blur)}
       \end{minipage}
       \begin{minipage}{0.3\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{assets/images/quality_control/contrast.png}   
+        \includegraphics[width=\textwidth]{assets/images/methods/porting/quality_control/contrast.png}   
         \caption{Foto con basso contrasto (Contrast)}
       \end{minipage}
       \begin{minipage}{0.3\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{assets/images/quality_control/snr.png}   
+        \includegraphics[width=\textwidth]{assets/images/methods/porting/quality_control/snr.png}   
         \caption{Foto con rumore (SNR)}
       \end{minipage}
     \end{figure}
@@ -350,12 +350,12 @@ snr = 10 * np.log10(signal_energy / noise_energy)
       \centering
       \begin{minipage}{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{assets/images/quality_control/less.png}  
+        \includegraphics[width=\textwidth]{assets/images/methods/porting/quality_control/less.png}  
         \caption{\\$finArea < minFinArea$}
       \end{minipage}
       \begin{minipage}{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{assets/images/quality_control/too.png}   
+        \includegraphics[width=\textwidth]{assets/images/methods/porting/quality_control/too.png}   
         \caption{\\$maxFinArea < finArea$}
       \end{minipage}
     \end{figure}
@@ -393,17 +393,17 @@ return model
       \centering
       \begin{minipage}{0.3\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{assets/images/features_extraction/original.png}   
+        \includegraphics[width=\textwidth]{assets/images/methods/porting/features_extraction/original.png}   
         \caption{Immagine originale}
       \end{minipage}
       \begin{minipage}{0.3\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{assets/images/features_extraction/gray.png}  
+        \includegraphics[width=\textwidth]{assets/images/methods/porting/features_extraction/gray.png}  
         \caption{Pinna estratta in scala di grigi}
       \end{minipage}
       \begin{minipage}{0.3\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{assets/images/features_extraction/features.png}   
+        \includegraphics[width=\textwidth]{assets/images/methods/porting/features_extraction/features.png}   
         \caption{Feature estratte}
       \end{minipage}
     \end{figure}
@@ -491,6 +491,13 @@ match_img = cv2.drawMatches(img1, kp1, img2, kp2, matches, None, flags=cv2.DrawM
 
       \newpage
     \section{Estrazione maschera con Deep Learning}
+      Durante lo svilupppo del porting, è nata l'esigenza di creare un dataset
+      composto da vere maschere create a mano, per avere un metro di paragone da
+      utilizzare con la precedente versione di SPIR per stabilire i progressi fatti nell'estrazione
+      delle maschere, proprio questa necessità ha fornito l'idea per lo studio paralello di
+      una rete neurale di tipo deep learning, avente l'obiettivo di estrarre le maschere per il 
+      ritaglio delle pinne di delfino.
+      \subsection{Dataset}
     \section{Backend SPIR}
     dsad
     \section{Frontend SPIR}

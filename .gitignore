@@ -1,12 +1,2 @@
-*.aux
-*.fls
-*.fdb*
-*.log
-*.synctex*
-*.toc
-*.xdv
-*.run.*
-*.bcf
-*.pdf
-*.bbl
-*.blg
+
+/output/*.*
