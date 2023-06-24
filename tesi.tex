@@ -300,30 +300,93 @@ mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel=kernel, iterations=1)
 fin = cv2.bitwise_and(image, image, mask=mask)
 \end{lstlisting}
     \subsection{Controllo qualità}
-    Per migliorare la qualità complessiva delle immagini passate alla fase di feature extraction,
-    si sceglie di porre diversi livelli di filtraggio con relativi parametri soglia,
-    un primo controllo viene effetuato sulla maschera generata, ovvero, se 
-    dopo tutti i passaggi di ottimizzazione della maschera (compresa l'eliminazione di
-    segmenti), l'area della maschera non rispetta la seguente disequazione:
-    \begin{minipage}{1\textwidth}
+    \begin{figure}[H]
       \centering
-      $minFinArea$ < $finArea$ < $maxFinArea$
-    \end{minipage}
-    Allora l'immagine sarà scartata dato che sicuramente l'estrazione della maschera
-    non avrà correttamente segmentato la pinna del delfino, sia in caso di eccesso o assenza di area.
+      \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/quality_control/blur.png}  
+        \caption{Foto sfocata (Blur)}
+      \end{minipage}
+      \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/quality_control/contrast.png}   
+        \caption{Foto con basso contrasto (Contrast)}
+      \end{minipage}
+      \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/quality_control/snr.png}   
+        \caption{Foto con rumore (SNR)}
+      \end{minipage}
+    \end{figure}
+    Una prima fase di filtraggio delle immagini viene applicata utilizzando dei metodi di 
+    controllo della qualità delle immagini, questo con il fine di scartare le foto con caratteristiche 
+    che andrebbero a compromettere a priori la fase di estrazione della maschera, data la scarsa qualità,
+    per effettuare questo controllo di utilizzano le seguenti metriche:
+    \begin{itemize}
+      \item Blur (sfocatura): La sfocatura si riferisce alla mancanza di nitidezza o di dettaglio nell'immagine. Misurare il livello di sfocatura è importante per valutare la qualità e la definizione di un'immagine. La sfocatura può essere causata da vari fattori come l'acquisizione non precisa dell'immagine, il movimento della fotocamera durante lo scatto o la compressione dell'immagine. La metrica di blur viene utilizzata per quantificare il grado di sfocatura presente nell'immagine e può aiutare a determinare se l'immagine soddisfa i requisiti desiderati in termini di nitidezza.
+      \begin{lstlisting}
+#Calcola la sfocatura utlizzando
+#il filtro Laplaciano
+blur = cv2.Laplacian(fin_gray, cv2.CV_64F).var()
+      \end{lstlisting}
+   
+      \newpage
+      \item Contrast (contrasto): Il contrasto si riferisce alla differenza di luminosità tra le diverse parti di un'immagine. Un buon contrasto è importante perché consente di distinguere meglio gli oggetti e i dettagli presenti nell'immagine. La metrica di contrasto valuta la differenza di intensità tra le regioni chiare e quelle scure dell'immagine. Un contrasto adeguato può migliorare la leggibilità e l'interpretazione dell'immagine stessa.
+      \begin{lstlisting}
+#Calcola il contrasto 
+#utilizzando la deviazione standard
+contrast = np.std(fin_gray)
+      \end{lstlisting}
+      \item SNR (Signal-to-Noise Ratio) o rapporto segnale-rumore: L'SNR è una misura che indica il livello del segnale rispetto al rumore presente in un'immagine. Il rumore può essere causato da vari fattori come l'acquisizione dell'immagine con condizioni di illuminazione scarsa, l'interferenza elettrica o il rumore introdotto durante la trasmissione o la compressione dell'immagine. Un alto rapporto segnale-rumore indica che il segnale (informazione utile) è predominante rispetto al rumore indesiderato nell'immagine. L'SNR è una metrica importante per valutare la qualità e la fedeltà dell'immagine, in quanto un alto SNR indica una migliore qualità dell'immagine in termini di dettaglio e fedeltà visiva.
+      \begin{lstlisting}
+signal_energy = np.sum(fin_gray ** 2)
+noise_energy = np.sum((fin_gray - cv2.GaussianBlur(fin_gray, (5, 5), 0)) ** 2)
+snr = 10 * np.log10(signal_energy / noise_energy)
+      \end{lstlisting}
+    \end{itemize}
+
+
     \begin{figure}[H]
       \centering
       \begin{minipage}{0.4\textwidth}
         \centering
         \includegraphics[width=\textwidth]{assets/images/quality_control/less.png}  
-        \caption{\\$finArea$ < $minFinArea$}
+        \caption{\\$finArea < minFinArea$}
       \end{minipage}
       \begin{minipage}{0.4\textwidth}
         \centering
         \includegraphics[width=\textwidth]{assets/images/quality_control/too.png}   
-        \caption{\\$maxFinArea$ < $finArea$}
+        \caption{\\$maxFinArea < finArea$}
       \end{minipage}
     \end{figure}
+    Per migliorare la qualità complessiva delle pinne estratte da passare alla fase di feature extraction,
+    si sceglie di porre diversi livelli di filtraggio con relativi parametri soglia,
+    un controllo viene effetuato sulla maschera generata, ovvero, se 
+    dopo tutti i passaggi di ottimizzazione della maschera (compresa l'eliminazione di
+    segmenti), l'area della maschera non rispetta la seguente disequazione:
+    \begin{minipage}{1\textwidth}
+      \centering
+      $minFinArea \leq finArea \leq maxFinArea$
+    \end{minipage}
+    
+    Allora l'immagine sarà scartata, dato che sicuramente l'estrazione della maschera
+    non avrà correttamente segmentato la pinna del delfino, sia in caso di eccesso o assenza di area.
+    
+    \begin{lstlisting}
+min_fin_area = 33, max_fin_area = 66
+mask_pixels = np.sum(mask == 255)
+total_pixels = mask.shape[0] * mask.shape[1]
+fin_area = (mask_pixels / total_pixels)*100
+# ...
+if fin_area < min_fin_area or fin_area > max_fin_area:
+  model.state = ModelData.ERR_AREA
+  return model
+
+model.state = ModelData.OK
+return model
+    \end{lstlisting}
+    \newpage
+   
     \subsection{Estrazione feature}
     \begin{figure}[H]
       
@@ -448,6 +511,6 @@ match_img = cv2.drawMatches(img1, kp1, img2, kp2, matches, None, flags=cv2.DrawM
   \section{Codice per l'estrazione delle maschere con OpenCV}
   \section{Codice per l'interfaccia utente in Flutter}
 
-\bibliographystyle{plain}
-\bibliography{bibliography}
+  \bibliographystyle{plain}
+  \bibliography{bibliography}
 \end{document}
