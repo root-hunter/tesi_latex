@@ -497,6 +497,9 @@ match_img = cv2.drawMatches(img1, kp1, img2, kp2, matches, None, flags=cv2.DrawM
       delle maschere, proprio questa necessità ha fornito l'idea per lo studio paralello di
       una rete neurale di tipo deep learning, avente l'obiettivo di estrarre le maschere per il 
       ritaglio delle pinne di delfino.
+      L'intero sviluppo della rete neurale è stato fatto 
+      nell'ambiente virtuale di Google Colab \cite{colab}, grazie ad esso è stato 
+      possibile sfruttare GPU e TPU per l'addestramento del modello, andando a velocizzare i tempi.
       \subsection{Dataset}
       \begin{figure}[H]
         \centering
@@ -512,7 +515,7 @@ match_img = cv2.drawMatches(img1, kp1, img2, kp2, matches, None, flags=cv2.DrawM
         \end{minipage}
       \end{figure}
       Il dataset è stato creato utilizzando il software open source Label Studio \cite{labelstudio}, il quale è stato installato su un server
-      remoto, ciò ha permesso di accedere facilmente da browser, il software offre diversi tipi di 
+      remoto, ciò ha permesso di accedere facilmente da browser, il software offre due tipi di 
       template per Object Segmentation:
       \begin{itemize}
         \item Maschere: le annotazioni sono rappresentate come maschere binarie che indicano l'area esatta degli oggetti di interesse. Ogni pixel può essere 1 (oggetto) o 0 (sfondo).
@@ -532,7 +535,12 @@ match_img = cv2.drawMatches(img1, kp1, img2, kp2, matches, None, flags=cv2.DrawM
         \item Metriche di valutazione standard: COCO fornisce metriche di valutazione standard per valutare le prestazioni dei modelli di segmentazione degli oggetti. Questo facilita il confronto tra i diversi approcci e la valutazione delle prestazioni in modo coerente e affidabile.
         \item Ampia comunità e risorse: Il formato COCO è supportato da una vasta comunità di ricercatori e sviluppatori nel campo della visione artificiale. Ciò significa che ci sono molte risorse, strumenti e modelli disponibili per lavorare con il formato COCO, semplificando lo sviluppo e la sperimentazione di nuovi metodi di segmentazione degli oggetti.
       \end{itemize}
+      \newpage
       \subsection{Rete}
+        Avendo il dataset pronto, si è passato allo sviluppo della rete neurale,
+        la scelta della libreria per implementare il deep learning è ricaduta su 
+        TensorFlow \cite{tensorflow}
+
     \section{Backend SPIR}
     dsad
     \section{Frontend SPIR}
