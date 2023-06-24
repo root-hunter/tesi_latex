@@ -521,7 +521,6 @@ match_img = cv2.drawMatches(img1, kp1, img2, kp2, matches, None, flags=cv2.DrawM
         \item Maschere: le annotazioni sono rappresentate come maschere binarie che indicano l'area esatta degli oggetti di interesse. Ogni pixel può essere 1 (oggetto) o 0 (sfondo).
         \item Poligoni: le annotazioni sono rappresentate come contorni poligonali che delimitano l'area degli oggetti. Sono definite da una serie di vertici o punti che seguono i contorni degli oggetti.
       \end{itemize}
-      \newpage
       In questo caso è stato scelto di utilizzare un dataset basato su label di tipo poligonale,
       questo dettato anche dalla velocità di creazione dei poligoni, un minor costo computazionale 
       di calcolo rispetto a dataset basato su maschere.
@@ -537,9 +536,70 @@ match_img = cv2.drawMatches(img1, kp1, img2, kp2, matches, None, flags=cv2.DrawM
       \end{itemize}
       \newpage
       \subsection{Rete}
-        Avendo il dataset pronto, si è passato allo sviluppo della rete neurale,
-        la scelta della libreria per implementare il deep learning è ricaduta su 
-        TensorFlow \cite{tensorflow}
+      Tra le varie alternative disponibili nel panorama delle librerie Python per ML e Deep,
+      la scelta è stata guidata dal miglior compromesso in termini di flessibilità e scalabilità,
+      anche in vista di sviluppi futuri del codice, questo ha portato a scegliere
+      TensorFlow \cite{tensorflow} come libreria, evidenziando i seguenti vantaggi:
+      \begin{itemize}
+        \item Ampia adozione e supporto della comunità: TensorFlow è uno dei framework di deep learning più popolari ed è ampiamente utilizzato in ambito accademico e industriale. Ciò significa che ci sono molte risorse, documentazione, tutorial e una vasta comunità di sviluppatori pronti a fornire supporto.
+        \item Ecosistema completo: TensorFlow fornisce un ecosistema completo per la creazione e la distribuzione di modelli di machine learning. Include strumenti per la pre-elaborazione dei dati, la creazione dei modelli, l'addestramento, l'ottimizzazione e l'inferenza.
+        \item Scalabilità e prestazioni: TensorFlow è stato progettato per sfruttare appieno le risorse hardware disponibili, inclusi processori multi-core, GPU e TPU. Questo consente di ottenere prestazioni elevate e di sfruttare al meglio le risorse hardware disponibili.
+        \item Supporto multi-piattaforma: TensorFlow è supportato su diverse piattaforme, tra cui desktop, server, dispositivi mobili e dispositivi IoT. Ciò consente di creare modelli una volta e distribuirli su diverse piattaforme senza dover ripensare completamente l'implementazione.
+      \end{itemize}
+      \newpage
+      Avendo il dataset pronto in formato COCO, non è stato difficile passare al
+      caricamento e creazione del dataset in TensorFlow, 
+      dato che il formato COCO salva i modelli e i relativi label
+      in formato JSON è stato necessario creare un metodo per il 
+      parsing, da JSON a TFRecord, questo permette di lavorare su 
+      un tipo di dataset composto da righe, con anche la possibilità
+      di salvare il dataset in diversi file .tfrecord di dimensioni fissate
+      così da ottimizzare le operazioni di caricamento del dataset in memoria. 
+      \begin{lstlisting}
+class Augment(tf.keras.layers.Layer):
+  #Viene impostato il seed per avere sempre la stessa generazione
+  def __init__(self, seed=42):
+    super().__init__()
+    self.augment_inputs = tf.keras.layers.RandomFlip(mode="horizontal", seed=seed)
+    self.augment_labels = tf.keras.layers.RandomFlip(mode="horizontal", seed=seed)
+    
+    self.augment_inputs_rotation = tf.keras.layers.RandomRotation(factor=0.2, seed=seed)
+    self.augment_labels_rotation = tf.keras.layers.RandomRotation(factor=0.2, seed=seed)
+    
+    self.augment_inputs_zoom = tf.keras.layers.RandomZoom(height_factor=(-0.2, 0.2), width_factor=(-0.2, 0.2), seed=seed)
+    self.augment_labels_zoom = tf.keras.layers.RandomZoom(height_factor=(-0.2, 0.2), width_factor=(-0.2, 0.2), seed=seed)
+#...
+      \end{lstlisting}
+ 
+      Data la scarsa quantità di modelli descritti da poligoni nel dataset (solo 150)
+      si è optato per applicare tecniche di data augmentation o aumento di dati tra cui: riflessione, ingrandimento e rotazione,
+      queste trasformazioni vengono applicate naturalmente sia al modello (foto del delfino) 
+      e sia al poligono che ne descrive la maschera 
+      della pinna, la scelta se applicare una delle trasformazioni al modello è fatta in modo 
+      casuale dai metodi di TensorFlow (tf.keras.layers).
+    
+      \begin{figure}[H]
+        \centering
+        \begin{minipage}{0.8\textwidth}
+          \centering
+          \includegraphics[width=\textwidth]{assets/images/methods/deep/network/network.png}   
+          \caption{Struttura rete neurale}
+        \end{minipage}
+      \end{figure}
+      Una volta costruito il dataset in formato TFRecordDataset si può passare
+      alla struttura della rete, come modello per effettuare Object Segmentation
+      è stato scelto U-Net \cite{ronneberger2015u},
+      \\ 
+      U-Net è un modello di rete neurale che si è dimostrato efficace per la segmentazione delle immagini,
+      compresa la creazione di maschere per oggetti di forma complessa come le pinne di delfino.
+      Le caratteristiche chiave di U-Net che lo rendono un buon modello per questo compito sono:
+
+      \begin{itemize}
+        \item Architettura a forma di U: U-Net utilizza un'architettura a forma di U, che combina un percorso di contrazione (encoder) con un percorso di espansione (decoder). Questa struttura consente di catturare dettagli a diverse scale e di ricostruire con precisione le forme complesse delle pinne di delfino.
+        \item Connessioni skip: U-Net incorpora connessioni skip tra le diverse profondità dell'encoder e del decoder. Queste connessioni consentono di preservare le informazioni a diverse scale spaziali durante il processo di up-sampling, aiutando a ripristinare dettagli fini nelle maschere delle pinne di delfino.
+        \item Utilizzo di convoluzioni e pooling: U-Net utilizza convoluzioni e operazioni di pooling per estrarre progressivamente le caratteristiche delle immagini in diverse profondità. Questo aiuta il modello a identificare gli elementi distintivi delle pinne di delfino e a discriminare tra le regioni di interesse e lo sfondo.
+        \item Utilizzo di dati di addestramento limitati: U-Net è stato progettato per funzionare bene anche con dataset di addestramento limitati. La sua architettura compatta e le connessioni skip consentono di ottenere buone prestazioni anche con un numero ridotto di esempi di addestramento.
+      \end{itemize}
 
     \section{Backend SPIR}
     dsad
