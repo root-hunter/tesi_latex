@@ -96,13 +96,18 @@
 
 \tableofcontents
 \chapter{Introduzione}
+  Il presente lavoro di tesi può essere contestualizzato nell’ambito di una disciplina emergente che coniuga l'informatica con
+  l'ecologia, nota come "ecoinformatica". Questo nuovo campo scientifico unisce la crescente capacità delle tecnologie 
+  dell’informazione di sfruttare dati complessi allo studio di processi ecologici ed ambientali. Essa risponde all'imperativo di accelerare
+  l’avvento di processi sostenibili in vista dei cambiamenti climatici e ambientali
+  globali.
   Ad oggi, gli ecosistemi del globo stanno sperimentando dei cambiamenti senza precedenti che minacciano la biodiversità del pianeta
   ed i servizi ecosistemici ed economici che fornisce alla popolazione umana. Tra gli innumerevoli fattori responsabili di tali cambiamenti sono annoverati
   il cambiamento climatico, la degradazione degli habitat ad opera dell'uomo, le varie forme di inquinamento (chimico, fisico, biologico), 
   l'estinzione di specie. Tutte queste minacce contribuiscono ad alimentare un circuito a feedback positivo, 
   che pone in serio pericolo il benessere e la sopravvivenza stessa dell'essere umano, la cui economia è strettamente
   legata allo sfruttamento di risorse naturali che si stanno via via impoverendo (sia qualitativamente che quantitativamente). Inoltre, 
-  in uno scenario di cambiamento climatico sempre più allarmante [vedi IPCC], risulta ormai essenziale lo sviluppo di soluzioni basate sulla
+  in uno scenario di cambiamento climatico sempre più allarmante, risulta ormai essenziale lo sviluppo di soluzioni basate sulla
   natura per contrastare sia riscaldamento globale che il trend di declino degli ecosistemi. Poichè è ampiamente dimostrato che la salute dell'essere umano è strettamente
   connessa a quella dell'ambiente e delle specie che lo popolano, risulta urgente e di fondamentale importanza accellerare e implementare i processi di
   monitoraggio degli ecosistemi grazie all'utilizzo di tecnologie innovative e all'avanguardia.
@@ -128,8 +133,20 @@
   per i cetacei sono stati esaustivamente elencati nella review della letteratura condotta da \cite{maglietta2022machine}. 
   Il presente lavoro di tesi ha voluto sviluppare un'implementazione del sistema SPIR (Smart Photo Identification of the Risso’s dolphin) \cite{maglietta2018dolfin}, 
   che rappresenta un sistema completamente automatizzato inizialmente sviluppato
-  per studiare la presenza del delfino di Risso nel Golfo di Taranto, specie classificata come 'Minacciata' dalla Red List della IUCN \cite{lanfredi2021grampus}. 
-  
+  per studiare la presenza del delfino di Risso (\textit{Grampus griseus}) nel Golfo di Taranto, specie classificata come 'Minacciata' dalla Red List della IUCN \cite{lanfredi2021grampus}. 
+  I delfini di Risso infatti sono distribuiti dai 
+  tropici fino alle regioni temperate in entrambi gli emisferi terrestri. Un individuo in 
+  età adulta può avere una lunghezza compresa tra 2,5 e 4 metri ed un peso di 500-
+  600 kg. A differenza di altri odontoceti, come i tursiopi, il capo si presenta sprovvisto di rostro 
+  e con un largo sfiatatoio nella parte superiore. L’intero corpo di questi delfini, pinna dorsale 
+  inclusa, è generalmente ricoperto da una quantità notevole di graffi di tonalità 
+  molto chiara. La comparsa di questi segni avviene in modo graduale nel corso della 
+  vita dell’animale (alla nascita, infatti, il colore del corpo è grigio scuro e uniforme) ed è molto probabilmente 
+  collegata ad interazioni sia di carattere sociale che alimentare. La presenza di graffi sulla superficie della pinna dorsale degli individui è proprio 
+  il tratto fisico distintivo che consente di 
+  applicare la tecnica di foto-identificazione agli esemplari di grampo. Ogni animale presenta un pattern di segni unico che lo 
+  contraddistingue individualmente all’interno della popolazione.
+
   Gli obiettivi di questo lavoro sono: 
   \begin{itemize}
     \item Realizzare il porting della versione originale del sistema di foto identificazione automatica SPIR.
@@ -154,6 +171,22 @@
     \subsection{Object Segmentation}
     \subsection{User Interface}
     \subsection{SPIR}
+    L'originale versione del sistema SPIR (MATLAB) consente di effettuare l’identificazione degli esemplari di 
+    grampo non noti basandosi su un dataset di esemplari precedentemente identificati senza alcun intervento da parte dell’utente. SPIR opera secondo i seguenti 
+    step principali:
+    \begin{itemize}
+      \item Utilizza in input immagini contenenti una pinna dorsale, ritagliate ad hoc a 
+      partire dagli scatti collezionati durante le campagne di raccolta dati
+      in mare;      
+      \item Applica algoritmi di feature extraction in grado di ottenere una 
+      rappresentazione dell’identità dell’individuo in termini di "descrittori" calcolati 
+      a partire dai graffi presenti sulla pinna (Scale
+      Invariant Feature Transform (SIFT));
+      \item Applica algoritmi di feature matching in grado di associare l’identità degli individui presenti 
+      nel database di esemplari già identificati a quella degli esemplari da identificare. 
+    
+    \end{itemize}
+
   \section{Obiettivi}
 
 \chapter{Metodi}
