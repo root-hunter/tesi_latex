@@ -96,9 +96,52 @@
 
 \tableofcontents
 \chapter{Introduzione}
-  Fondamentale implementare la fotoid
+  Ad oggi, gli ecosistemi del globo stanno sperimentando dei cambiamenti senza precedenti che minacciano la biodiversità del pianeta
+  ed i servizi ecosistemici ed economici che fornisce alla popolazione umana. Tra gli innumerevoli fattori responsabili di tali cambiamenti sono annoverati
+  il cambiamento climatico, la degradazione degli habitat ad opera dell'uomo, le varie forme di inquinamento (chimico, fisico, biologico), 
+  l'estinzione di specie. Tutte queste minacce contribuiscono ad alimentare un circuito a feedback positivo, 
+  che pone in serio pericolo il benessere e la sopravvivenza stessa dell'essere umano, la cui economia è strettamente
+  legata allo sfruttamento di risorse naturali che si stanno via via impoverendo (sia qualitativamente che quantitativamente). Inoltre, 
+  in uno scenario di cambiamento climatico sempre più allarmante [vedi IPCC], risulta ormai essenziale lo sviluppo di soluzioni basate sulla
+  natura per contrastare sia riscaldamento globale che il trend di declino degli ecosistemi. Poichè è ampiamente dimostrato che la salute dell'essere umano è strettamente
+  connessa a quella dell'ambiente e delle specie che lo popolano, risulta urgente e di fondamentale importanza accellerare e implementare i processi di
+  monitoraggio degli ecosistemi grazie all'utilizzo di tecnologie innovative e all'avanguardia.
+  
+  L'ambiente marino è uno degli habitat più minacciati del pianeta. Appare quindi necessario 
+  studiare con particolare attenzione le specie marine
+  vulnerabili che utilizzano tale ambiente al fine di comprendere come esse possono reagire ai rapidi cambiamenti in atto. 
+  A tal proposito, la tecnica di foto identificazione rientra tra le metodologie maggiormente
+  utilizzate e più efficaci per monitorare nel tempo specie d'interesse conservazionistico e elusive, 
+  come i cetacei. Questi animali svolgono un ruolo fondamentale nella conservazione della biodiversità marina, mantenendo la stabilità 
+  degli ecosistemi marini grazie al loro ruolo di predatori di vertice nelle reti alimentari.
+  La foto identificazione (photo ID) è una tecnica non invasiva dedicata all'identificazione 
+  di singoli esemplari tramite foto. Si basa sull'ipotesi che ogni esemplare abbia caratteristiche uniche che consentano il suo riconoscimento.
+  Le informazioni ottenute con gli studi di photo ID sono utili per effettuare una stima della abbondanza delle popolazioni di specie studiate,
+  sulle loro dinamiche sociali e movimenti migratori, così da contribuire in modo efficace alle misure di gestione e conservazione delle suddette specie.
+
+  Un limite che ostacola l'utilizzo e l'applicazione della tecnica della foto identificazione manuale è che essa
+  richiede molto tempo ed è poco pratica nel caso di grandi insiemi di dati. Per ridurre il tempo e lo sforzo dell'utente necessario a
+  identificare e riconoscere gli individui incontrati, sono stati pertanto sviluppati dei sistemi tecnologici automatizzati e intelligenti
+  finalizzati a supportare i ricercatori nella foto identificazione. Nel caso specifico della foto identificazione dei cetacei che si basa sull'utilizzo
+  delle pinne dorsali degli individui fotografati, l'elaborazione automatica di queste immagini prevede diverse fasi: una fase di rilevamento dell'oggetto, un ritaglio della pinna, la segmentazione e l'estrazione della maschera. Successivamente, 
+  se richiesto, può essere eseguita l'estrazione delle caratteristiche, seguita dal riconoscimento individuale. I sistemi semi-automatici ed automatici di foto identificazione
+  per i cetacei sono stati esaustivamente elencati nella review della letteratura condotta da \cite{maglietta2022machine}. 
+  Il presente lavoro di tesi ha voluto sviluppare un'implementazione del sistema SPIR (Smart Photo Identification of the Risso’s dolphin) \cite{maglietta2018dolfin}, 
+  che rappresenta un sistema completamente automatizzato inizialmente sviluppato
+  per studiare la presenza del delfino di Risso nel Golfo di Taranto, specie classificata come 'Minacciata' dalla Red List della IUCN \cite{lanfredi2021grampus}. 
+  
+  Gli obiettivi di questo lavoro sono: 
+  \begin{itemize}
+    \item Realizzare il porting della versione originale del sistema di foto identificazione automatica SPIR.
+    \item Sviluppare una pipeline che includa nel sistema SPIR un'intelligenza artificiale per la funzione di estrazione delle maschere.
+    \item Sviluppare un'interfaccia grafica che renda il nuovo sistema SPIR user-friendly.
+
+  \end{itemize}
+
+
+
   \section{Stato dell'arte}
-    \subsection{Elaborazione delle immagini PROVA}
+    \subsection{Elaborazione delle immagini}
       La manipolazione e l'elaborazione delle immagini svolgono un ruolo fondamentale in numerosi settori, tra cui la visione artificiale, la grafica computazionale e l'analisi di immagini biomediche. 
       In quest'ambito, gli operatori morfologici e logici giocano un ruolo chiave nella modifica e nell'estrazione di informazioni significative da immagini digitali. \\
       Gli operatori morfologici sono basati sulla teoria della morfologia matematica e vengono utilizzati per la manipolazione di forme geometriche all'interno di un'immagine. \\
