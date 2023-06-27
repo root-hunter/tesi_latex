@@ -115,25 +115,25 @@
 
 \chapter{Metodi}
   \section{Porting del sistema SPIR}
-    In una prima fase di analisi di SPIR (MATLAB) si nota che l'interazione è confinata
-    a linea di comando (CLI), in ottica di offrire le funzionalità di SPIR a una più ampia
-    fascia di utenza, mantendo anche la possibilità di usufruire del codice sorgente 
-    da parte di utenti più esperti si è optato per una implementazione basata su client/server,
-    in particolare slegando le componenti di interazione e logica del sistema si ha la possibilità
-    di utilizzare le tecnologie più apporpriate a seconda del contesto, per poi mettere in comunicazione le 
-    varie componenti.
+    Da una prima fase di analisi di SPIR (MATLAB) si nota che l'interazione tra utente e codice è confinata
+    a linea di comando (CLI), caratteristica limitante della versione originale del software. Pertanto, in ottica di estendere l'utilizzo di SPIR a una più ampia
+    fascia di utenza e, al contempo, mantenere la possibilità di usufruire del codice sorgente, si è optato per una implementazione basata su client/server.
+    In particolare, il criterio su cui si è basata l'implementazione del software consiste nello slegare le componenti di interazione e logica del sistema, in modo tale da utilizzare tecnologie più appropriate a seconda del contesto, per poi mettere in comunicazione le 
+    varie componenti. Nei seguenti paragrafi sono illustrati i metodi con cui si è effettuato il porting del sistema SPIR.
     \subsection{Estrazione della maschera}
-      Lo sviluppo si è concentrato inizialmente sulla riscrittura delle funzionalità principali di SPIR,
-      come linguaggio è stato scelto Python per i seguenti motivi:
+      Lo sviluppo di una versione implementata di SPIR si è concentrato inizialmente sulla riscrittura delle sue funzionalità principali.
+      Come linguaggio è stato scelto Python per i seguenti motivi:
       \begin{itemize}
         \item Vasta gamma di librerie per la manipolazione di immagini disponibili.
         \item Utilizzo di OpenCV \cite{opencv_library} per l'elaborazione delle immagini.
         \item Buona diffusione in ambito scientifico.
+        \item Licenza open source.
         \item Supporto attivo dalla community di sviluppatori.
+
       \end{itemize}
       
       La prima funzionalità presa in analisi per il porting è stata l'estrazione delle maschere dalle immagini,
-      di fondamentale importanza al fine di ottimizzare l'area di estrazione delle features, l'estrazione delle maschere viene fatta
+      passaggio di fondamentale importanza al fine di ottimizzare l'area di estrazione delle features. L'estrazione delle maschere viene fatta
       nel metodo 
       \begin{verbatim}
 prepare_images_vlfeat.m
@@ -153,19 +153,18 @@ prepare_images_vlfeat.m
         \end{minipage}
       \end{figure}
 
-      L'immagine viene convertita nello spazio colore Cielab, è uno spazio \\
-      colore-opponente con la dimensione L per la luminosità e a e b per le dimensioni colore-opponente,
+      Il primo step necessario a realizzare l'estrazione delle maschere consiste nel convertire l'immagine nello spazio colore Cielab che è uno spazio colore-opponente con la dimensione L per la luminosità e a e b per le dimensioni colore-opponente,
       basato sulle coordinate dello spazio colore non lineare compresso CIE XYZ.
       La luminosità è calcolata usando la radice cubica della luminanza relativa. 
-      Lab include tutti i colori percepibili, perciò include completamente i gamut degli 
+      Lab comprende tutti i colori percepibili, perciò include completamente i gamut degli 
       spazi colore RGB e CMYK ed è indipendente dal dispositivo che li rappresenta.
       
-      Come nella versione originale il primo passo è convertire l'immagine da RGB a CIELAB, 
-      a differenza di matlab OpenCV utilizza il formato BGR, ovvero il vettore dei colori per ogni pixel è invertito,
-      dall'immagine convertita in spazio colore CIELAB si estrae il canale B dall'immagine questo permette di mettere in evidenza 
+      Come nella versione originale il primo passo è convertire l'immagine da RGB a CIELAB.
+      Tuttavia a differenza di matlab OpenCV utilizza il formato BGR, ovvero il vettore dei colori per ogni pixel è invertito.
+      Dall'immagine convertita in spazio colore CIELAB si estrae il canale B dall'immagine, in modo da mettere in evidenza 
       le aree blu dell'immagine così da isolare la parte di mare presente nello sfondo delle foto.
       \newpage
-      La sogliatura di Otsu, chiamata anche metodo di Otsu, è un algoritmo utilizzato per determinare automaticamente il valore di soglia ottimale per la segmentazione di un'immagine in bianco e nero.
+      Il secondo step dell'estrazione delle maschere è rappresentato dalla sogliatura di Otsu, chiamata anche metodo di Otsu, che è un algoritmo utilizzato per determinare automaticamente il valore di soglia ottimale per la segmentazione di un'immagine in bianco e nero.
       L'obiettivo della sogliatura è quello di separare i pixel dell'immagine in due classi, generalmente il primo piano (oggetti di interesse) e lo sfondo.
       \begin{figure}
         \centering

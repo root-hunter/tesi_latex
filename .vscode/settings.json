@@ -26,5 +26,6 @@
                 "xelatexmk",
             ]
         }
-    ]
+    ],
+    "latex-workshop.latex.max_memory_restart": "2000"
 }
