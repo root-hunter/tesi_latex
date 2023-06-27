@@ -16,7 +16,6 @@
 \usepackage{natbib}
 
 
-
 \captionsetup{
   font=small, % Imposta il font delle didascalie come "small" (piccolo)
   justification=centering, % Allinea le didascalie al centro
@@ -115,11 +114,18 @@
 
 \chapter{Metodi}
   \section{Porting del sistema SPIR}
-    Da una prima fase di analisi di SPIR (MATLAB) si nota che l'interazione tra utente e codice è confinata
-    a linea di comando (CLI), caratteristica limitante della versione originale del software. Pertanto, in ottica di estendere l'utilizzo di SPIR a una più ampia
-    fascia di utenza e, al contempo, mantenere la possibilità di usufruire del codice sorgente, si è optato per una implementazione basata su client/server.
-    In particolare, il criterio su cui si è basata l'implementazione del software consiste nello slegare le componenti di interazione e logica del sistema, in modo tale da utilizzare tecnologie più appropriate a seconda del contesto, per poi mettere in comunicazione le 
-    varie componenti. Nei seguenti paragrafi sono illustrati i metodi con cui si è effettuato il porting del sistema SPIR.
+  Da una prima fase di analisi di SPIR (MATLAB) si nota che l'interazione tra utente e codice è confinata
+  a linea di comando (CLI), caratteristica limitante della versione originale del software. Pertanto, in ottica di estendere l'utilizzo di SPIR a una più ampia
+  fascia di utenza e, al contempo, mantenere la possibilità di usufruire del codice sorgente, si è optato per una implementazione basata su client/server.
+  In particolare, il criterio su cui si è basata l'implementazione del software consiste nello slegare le componenti di interazione e logica del sistema, in modo tale da utilizzare tecnologie più appropriate a seconda del contesto, per poi mettere in comunicazione le 
+  varie componenti. Nei seguenti paragrafi sono illustrati i metodi con cui si è effettuato il porting del sistema SPIR.
+  \newpage
+  \begin{figure}[H]
+    \centering
+      \includegraphics[width=\textwidth]{assets/images/methods/porting/porting_digram.png}  
+      \caption{Flowchart SPIR Python}
+  \end{figure}
+
     \subsection{Estrazione della maschera}
       Lo sviluppo di una versione implementata di SPIR si è concentrato inizialmente sulla riscrittura delle sue funzionalità principali.
       Come linguaggio è stato scelto Python per i seguenti motivi:
@@ -138,7 +144,7 @@
       \begin{verbatim}
 prepare_images_vlfeat.m
       \end{verbatim}
-      \begin{figure}
+      \begin{figure}[H]
         \centering
         
         \begin{minipage}{0.35\textwidth}
@@ -153,6 +159,7 @@ prepare_images_vlfeat.m
         \end{minipage}
       \end{figure}
 
+
       Il primo step necessario a realizzare l'estrazione delle maschere consiste nel convertire l'immagine nello spazio colore Cielab che è uno spazio colore-opponente con la dimensione L per la luminosità e a e b per le dimensioni colore-opponente,
       basato sulle coordinate dello spazio colore non lineare compresso CIE XYZ.
       La luminosità è calcolata usando la radice cubica della luminanza relativa. 
@@ -166,7 +173,7 @@ prepare_images_vlfeat.m
       \newpage
       Il secondo step dell'estrazione delle maschere è rappresentato dalla sogliatura di Otsu, chiamata anche metodo di Otsu, che è un algoritmo utilizzato per determinare automaticamente il valore di soglia ottimale per la segmentazione di un'immagine in bianco e nero.
       L'obiettivo della sogliatura è quello di separare i pixel dell'immagine in due classi, generalmente il primo piano (oggetti di interesse) e lo sfondo.
-      \begin{figure}
+      \begin{figure}[H]
         \centering
         
         \begin{minipage}{0.3\textwidth}
@@ -208,7 +215,7 @@ thr_b, _ = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         considerando anche la distribuzione dei pixel di ciascuna classe.
         In altre parole, si cerca la soglia che massimizza la separazione tra i due gruppi di pixel.
 
-      \begin{figure}
+      \begin{figure}[H]
         \centering
         \begin{minipage}{0.3\textwidth}
           \centering
@@ -448,7 +455,7 @@ sift_descriptors = sift_descriptors[selected_indices]
       per un determinato compito o problema presentano una maggiore variabilità rispetto alle feature meno rilevanti.
       Pertanto, selezionando le feature con una varianza superiore a una soglia specificata, 
       si tende a mantenere le feature che portano informazioni significative.
-      \subsection{Salvataggio dataset}
+      \subsection{Salvataggio feature}
       Il salvataggio delle feature estratte è stato implementato tramite Protocol Buffer (Protocolbuf),
       è un meccanismo di serializzazione dei dati sviluppato da Google.
       È un formato di scambio di dati binario che consente di definire la struttura 
@@ -566,7 +573,6 @@ class Augment(tf.keras.layers.Layer):
     self.augment_inputs_zoom = tf.keras.layers.RandomZoom(height_factor=(-0.2, 0.2), width_factor=(-0.2, 0.2), seed=seed)
 #...
       \end{lstlisting}
- 
       Data la scarsa quantità di modelli descritti da poligoni nel dataset (solo 150)
       si è optato per applicare tecniche di data augmentation o aumento di dati tra cui: riflessione, ingrandimento e rotazione,
       queste trasformazioni vengono applicate naturalmente sia al modello (foto del delfino) 
@@ -602,10 +608,10 @@ class Augment(tf.keras.layers.Layer):
     \section{Frontend SPIR}
 
 \chapter{Risultati sperimentali}
-  \section{Valutazione dei risultati}
-    \subsection{Confronto tra i diversi approcci implementati}
-    \subsection{Analisi delle prestazioni e dei risultati ottenuti}
-  \section{Limitazioni e problematiche riscontrate con approccio Deep Learning}
+  \section{Confrontro tra i diversi approcci}
+    \subsection{Estrazione delle maschere}
+    \subsection{Matching features}
+    \subsection{Prestazioni}
 
 \chapter{Conclusioni}
   \section{Riepilogo degli obiettivi raggiunti}
