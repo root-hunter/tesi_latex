@@ -561,13 +561,10 @@ class Augment(tf.keras.layers.Layer):
   def __init__(self, seed=42):
     super().__init__()
     self.augment_inputs = tf.keras.layers.RandomFlip(mode="horizontal", seed=seed)
-    self.augment_labels = tf.keras.layers.RandomFlip(mode="horizontal", seed=seed)
     
     self.augment_inputs_rotation = tf.keras.layers.RandomRotation(factor=0.2, seed=seed)
-    self.augment_labels_rotation = tf.keras.layers.RandomRotation(factor=0.2, seed=seed)
     
     self.augment_inputs_zoom = tf.keras.layers.RandomZoom(height_factor=(-0.2, 0.2), width_factor=(-0.2, 0.2), seed=seed)
-    self.augment_labels_zoom = tf.keras.layers.RandomZoom(height_factor=(-0.2, 0.2), width_factor=(-0.2, 0.2), seed=seed)
 #...
       \end{lstlisting}
  
