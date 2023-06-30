@@ -134,7 +134,9 @@
   connessa a quella dell'ambiente e delle specie che lo popolano, risulta urgente e di fondamentale importanza accellerare e implementare i processi di
   monitoraggio degli ecosistemi grazie all'utilizzo di tecnologie innovative e all'avanguardia.
   
-  L'ambiente marino è uno degli habitat più minacciati del pianeta. Appare quindi necessario 
+  L'ambiente marino è uno degli habitat più minacciati del pianeta.
+  \newpage
+  Appare quindi necessario 
   studiare con particolare attenzione le specie marine
   vulnerabili che utilizzano tale ambiente al fine di comprendere come esse possono reagire ai rapidi cambiamenti in atto. 
   A tal proposito, la tecnica di foto identificazione rientra tra le metodologie maggiormente
@@ -145,7 +147,7 @@
   di singoli esemplari tramite foto. Si basa sull'ipotesi che ogni esemplare abbia caratteristiche uniche che consentano il suo riconoscimento.
   Le informazioni ottenute con gli studi di photo ID sono utili per effettuare una stima della abbondanza delle popolazioni di specie studiate,
   sulle loro dinamiche sociali e movimenti migratori, così da contribuire in modo efficace alle misure di gestione e conservazione delle suddette specie.
-
+  \\
   Un limite che ostacola l'utilizzo e l'applicazione della tecnica della foto identificazione manuale è che essa
   richiede molto tempo ed è poco pratica nel caso di grandi insiemi di dati. Per ridurre il tempo e lo sforzo dell'utente necessario a
   identificare e riconoscere gli individui incontrati, sono stati pertanto sviluppati dei sistemi tecnologici automatizzati e intelligenti
@@ -629,7 +631,9 @@ for model in dataset.models:
             data[model.name] = average_distance
 #...
       \end{lstlisting}
-      La strategia KNN (K-Nearest Neighbors) è stata scelta per effettuare il match delle feature estratte dalle pinne di delfino per diversi motivi. Il KNN è un algoritmo di apprendimento supervisionato utilizzato per la classificazione e il riconoscimento dei pattern. È un metodo semplice ma efficace per la classificazione basata sulla vicinanza dei punti nel suo spazio delle feature.
+      La strategia KNN (K-Nearest Neighbors) è stata scelta per effettuare il match delle feature estratte dalle pinne di delfino per diversi motivi. Il KNN è un algoritmo di apprendimento supervisionato utilizzato per la classificazione e il riconoscimento dei pattern. 
+      \newpage
+      È un metodo semplice ma efficace per la classificazione basata sulla vicinanza dei punti nel suo spazio delle feature.
       Nel contesto del riconoscimento delle pinne di delfino, le feature estratte, come ad esempio i descrittori SIFT (Scale-Invariant Feature Transform), rappresentano le caratteristiche distintive delle pinne. Queste feature possono includere informazioni come orientamento, forma e disposizione dei punti chiave delle pinne.
       L'obiettivo principale di utilizzare l'algoritmo KNN in questo caso è quello di trovare le corrispondenze più simili tra le feature estratte dalle diverse pinne. Il funzionamento del KNN prevede che, dato un punto di input (cioè una feature estratta da una pinna), l'algoritmo confronti questo punto con i punti di allenamento (feature estratte da altre pinne) e determini i "K" punti di allenamento più vicini in base a una misura di distanza. In seguito, il punto di input viene classificato in base alla maggioranza dei K punti di allenamento più vicini.
       Nel caso delle pinne di delfino, l'algoritmo KNN può essere utilizzato per confrontare le feature estratte da una pinna con un insieme di feature di pinne di delfino precedentemente raccolte e classificate (dataset). In altre parole, le feature estratte dalle pinne di delfino sconosciute possono essere confrontate con le feature delle pinne di delfino note, e l'algoritmo KNN può essere utilizzato per determinare a quale pinna conosciuta la pinna sconosciuta è più simile.
@@ -686,7 +690,7 @@ for model in dataset.models:
         \item Ampia comunità e risorse: Il formato COCO è supportato da una vasta comunità di ricercatori e sviluppatori nel campo della visione artificiale. Ciò significa che ci sono molte risorse, strumenti e modelli disponibili per lavorare con il formato COCO, semplificando lo sviluppo e la sperimentazione di nuovi metodi di segmentazione degli oggetti.
       \end{itemize}
       \newpage
-      \subsection{Rete}
+      \subsection{Struttura Rete}
       Tra le varie alternative disponibili nel panorama delle librerie Python per ML e Deep,
       la scelta è stata guidata dal miglior compromesso in termini di flessibilità e scalabilità,
       anche in vista di sviluppi futuri del codice, questo ha portato a scegliere
@@ -748,6 +752,8 @@ class Augment(tf.keras.layers.Layer):
         \item Utilizzo di convoluzioni e pooling: U-Net utilizza convoluzioni e operazioni di pooling per estrarre progressivamente le caratteristiche delle immagini in diverse profondità. Questo aiuta il modello a identificare gli elementi distintivi delle pinne di delfino e a discriminare tra le regioni di interesse e lo sfondo.
         \item Utilizzo di dati di addestramento limitati: U-Net è stato progettato per funzionare bene anche con dataset di addestramento limitati. La sua architettura compatta e le connessioni skip consentono di ottenere buone prestazioni anche con un numero ridotto di esempi di addestramento.
       \end{itemize}
+    \subsection{Training}
+    \subsection{Generazione maschera}
 
     \section{Sistema SPIR}
     \begin{figure}[H]
@@ -779,7 +785,8 @@ class Augment(tf.keras.layers.Layer):
 
     \newpage    
     \subsection{Frontend}
-    Flutter \cite{flutter} è stato scelto come framework client per il sistema per diversi motivi chiave. Innanzitutto, offre prestazioni native di alta qualità, garantendo che le app sviluppate con Flutter siano veloci, reattive e abbiano un'esperienza utente ottimale. Grazie alla sua architettura, Flutter consente alle app di interagire direttamente con il sistema operativo sottostante, eliminando la necessità di un bridge e garantendo prestazioni ottimali.
+    Flutter \cite{flutter} è stato scelto come framework client per il sistema per diversi motivi chiave.
+    Innanzitutto, offre prestazioni native di alta qualità, garantendo che le app sviluppate con Flutter siano veloci, reattive e abbiano un'esperienza utente ottimale. Grazie alla sua architettura, Flutter consente alle app di interagire direttamente con il sistema operativo sottostante, eliminando la necessità di un bridge e garantendo prestazioni ottimali.
     Uno dei fattori principali che ha guidato la scelta del framework è rappresentato dalle prestazioni native di Flutter. Grazie alla sua architettura, Flutter consente alle app di raggiungere prestazioni elevate e reattività, garantendo un'esperienza utente di qualità. Questo è particolarmente importante per un'applicazione che richiede l'estrazione delle feature e il matching, in cui la velocità e l'efficienza sono fondamentali.
     \\
 
