@@ -766,10 +766,40 @@ class Augment(tf.keras.layers.Layer):
 
     In sintesi, gRPC offre un modo efficiente, scalabile e flessibile per la comunicazione tra client e server. I vantaggi di basare un server su gRPC includono alte prestazioni, supporto per diversi linguaggi di programmazione, generazione automatica del codice, supporto per diversi tipi di chiamate e streaming bidirezionale. Queste caratteristiche rendono gRPC una scelta popolare per lo sviluppo di servizi distribuiti e sistemi scalabili.
 
-    
+    \newpage    
     \subsection{Frontend}
-    \subsection{User Interface}
+    Flutter \cite{flutter} è stato scelto come framework client per il sistema per diversi motivi chiave. Innanzitutto, offre prestazioni native di alta qualità, garantendo che le app sviluppate con Flutter siano veloci, reattive e abbiano un'esperienza utente ottimale. Grazie alla sua architettura, Flutter consente alle app di interagire direttamente con il sistema operativo sottostante, eliminando la necessità di un bridge e garantendo prestazioni ottimali.
+    Uno dei fattori principali che ha guidato la scelta del framework è rappresentato dalle prestazioni native di Flutter. Grazie alla sua architettura, Flutter consente alle app di raggiungere prestazioni elevate e reattività, garantendo un'esperienza utente di qualità. Questo è particolarmente importante per un'applicazione che richiede l'estrazione delle feature e il matching, in cui la velocità e l'efficienza sono fondamentali.
+    \\
 
+    \begin{figure}[H]
+      \centering
+      \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/methods/frontend/dataset.png}   
+        \caption{Sezione creazione dataset}
+      \end{minipage}
+      \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/methods/frontend/dataset_image.png}  
+        \caption{Anteprima modello}
+      \end{minipage}
+      \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/methods/frontend/dataset_mask.png}   
+        \caption{Anteprima maschera estratta}
+      \end{minipage}
+    \end{figure}
+
+    \newpage
+      
+    L'utilizzo di gRPC in combinazione con Flutter consente una comunicazione efficiente e performante tra il client e il server. In particolare, il supporto per lo streaming bidirezionale offerto da gRPC è vantaggioso per l'estrazione delle feature e il matching, consentendo una comunicazione continua tra il client e il server.
+    La natura dichiarativa dell'interfaccia utente di Flutter è un altro motivo che ha influenzato la scelta del framework. Con Flutter, l'interfaccia utente viene descritta utilizzando widget, che semplifica la creazione e la personalizzazione di interfacce utente moderne e accattivanti. La funzionalità di Hot Reload di Flutter consente 
+     di visualizzare immediatamente le modifiche apportate al codice durante lo sviluppo, consentendo un iterativo e rapido processo di sviluppo.
+    \\
+    La vasta community di sviluppatori attivi e il supporto continuo offerti da Google sono ulteriori vantaggi che hanno pesato nella scelta di Flutter come framework client. Una community vivace fornisce risorse, documentazione e pacchetti aggiuntivi, facilitando l'apprendimento e l'implementazione di funzionalità aggiuntive nell'applicazione.
+    \\
+    L'integrazione di TensorFlow in Flutter consente di eseguire inferenze di reti neurali direttamente sui dispositivi dei client, senza dover inviare i dati al server per l'elaborazione. Questa funzionalità potrebbe aprire nuove possibilità per le applicazioni mobili, consentendo loro di sfruttare la potenza delle reti neurali anche in assenza di una connessione Internet o in situazioni in cui la latenza di rete potrebbe essere un problema.
 \chapter{Risultati sperimentali}
   \section{Confrontro tra i diversi approcci}
     \subsection{Estrazione delle maschere}
