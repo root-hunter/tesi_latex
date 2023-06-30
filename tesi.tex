@@ -14,6 +14,8 @@
 \usepackage{enumitem}
 \usepackage{float}
 \usepackage{natbib}
+\usepackage{quotchap}
+
 
 
 \captionsetup{
@@ -70,15 +72,15 @@
 \centering
 
 \textbf{\large Università degli Studi di Bari} \\
-\vspace{0.5cm}
+\vspace{0.3cm}
 \textbf{\large Dipartimento di Informatica} \\
-\vspace{2cm}
+\vspace{1.5cm}
 \includegraphics[width=40mm,scale=0.5]{assets/images/logo.png} \\
-\vspace{2cm}
+\vspace{1.5cm}
 \textbf{\large Tesi di Laurea Triennale in Informatica e Tecnologie per la Produzione del Software} \\
 \vspace{1cm}
-\textbf{\LARGE Progettazione sistema SPIR} \\
-\vspace{1cm}
+\textbf{\LARGE Upgrade del Sistema di Foto Identificazione Automatica SPIR: Porting, Intelligenza Artificiale e Ottimizzazione dell'Interfaccia Utente} \\
+\vspace{0.7cm}
 \textbf{\large Autore:} \\
 \textbf{Antonio Ricciardi} \\
 \vspace{0.3cm}
@@ -89,10 +91,20 @@
 \textbf{Rosalia Maglietta} \\
 \textbf{Carla Cherubini} \\
 \vfill
+\vspace{0.3cm}
 \textbf{\large Anno Accademico 2022/2023} % Inserisci l'anno accademico corretto
     
 \end{titlepage}
+\clearpage
+\thispagestyle{empty}
 
+\vspace*{\fill}
+\begin{center}
+\textit{“Make everything as simple as possible, but not simpler.”\\
+- ALBERT EINSTEIN}
+\end{center}
+\vfill
+\clearpage
 \tableofcontents
 \chapter{Introduzione}
   Il presente lavoro di tesi può essere contestualizzato nell’ambito di una disciplina emergente che coniuga l'informatica con
@@ -144,7 +156,7 @@
   collegata ad interazioni sia di carattere sociale che alimentare. La presenza di graffi sulla superficie della pinna dorsale degli individui è proprio 
   il tratto fisico distintivo che consente di 
   applicare la tecnica di foto-identificazione agli esemplari di grampo. Ogni animale presenta un pattern di segni unico che lo 
-  contraddistingue individualmente all’interno della popolazione.
+  contraddistingue individualmente all'interno della popolazione.
 
   Gli obiettivi di questo lavoro sono: 
   \begin{itemize}
@@ -195,7 +207,6 @@
   fascia di utenza e, al contempo, mantenere la possibilità di usufruire del codice sorgente, si è optato per una implementazione basata su client/server.
   In particolare, il criterio su cui si è basata l'implementazione del software consiste nello slegare le componenti di interazione e logica del sistema, in modo tale da utilizzare tecnologie più appropriate a seconda del contesto, per poi mettere in comunicazione le 
   varie componenti. Nei seguenti paragrafi sono illustrati i metodi con cui si è effettuato il porting del sistema SPIR.
-  \newpage
   \begin{figure}[H]
     \centering
       \includegraphics[width=\textwidth]{assets/images/methods/porting/porting_digram.png}  
@@ -441,6 +452,7 @@ snr = 10 * np.log10(signal_energy / noise_energy)
         \caption{\\$maxFinArea < finArea$}
       \end{minipage}
     \end{figure}
+    
     Per migliorare la qualità complessiva delle pinne estratte da passare alla fase di feature extraction,
     si sceglie di porre diversi livelli di filtraggio con relativi parametri soglia,
     un controllo viene effetuato sulla maschera generata, ovvero, se 
@@ -549,26 +561,58 @@ sift_descriptors = sift_descriptors[selected_indices]
       \end{itemize}
       \newpage
       \subsection{Match feature}
+      \begin{figure}[H]
+        \centering
+        \centering
+        \includegraphics[width=\textwidth]{/home/roothunter/Documents/Tesi/latex/assets/images/methods/porting/features_match/match.png}   
+        \caption{Match delle feature}
+      \end{figure}
+
+
       Dopo il salvataggio del dataset contenente tutti i keypoint e descrittori 
-      \\ per ogni immagine, raggruppati per nome di delfino si è passato ad implementare il match con OpenCV,
+      \\ per ogni immagine, raggruppati per nome di delfino, si è passato ad implementare il match con OpenCV. \\
+      In OpenCV, ci sono diverse strategie di match di feature che possono essere utilizzate per confrontare e cercare corrispondenze tra le caratteristiche estratte da diverse immagini. Di seguito sono elencate alcune delle strategie più comuni:
+
+      \begin{itemize}
+        \item Brute-Force Matching: Questa è la strategia più semplice, in cui ogni caratteristica estratta dall'immagine di query viene confrontata con tutte le caratteristiche estratte dall'immagine di train. Questo metodo può essere computazionalmente costoso se il numero di caratteristiche è elevato.
+        \item K-Nearest Neighbors (KNN) Matching: Invece di confrontare ogni caratteristica con tutte le caratteristiche dell'immagine di train, questo approccio seleziona i K punti più vicini (più simili) per ogni caratteristica estratta dall'immagine di query. Può essere usato il modulo FlannBasedMatcher per utilizzare un algoritmo di ricerca dell'albero kd-tree per migliorare l'efficienza.
+        \item RANSAC (Random Sample Consensus): È una tecnica robusta per stimare i parametri di un modello matematico da un set di dati che contiene outlier. Nell'ambito del match di feature, RANSAC può essere utilizzato per stimare la trasformazione geometrica (ad esempio, una trasformazione affina o una trasformazione prospettica) tra due immagini.
+        \item Lowe's Ratio Test: Questo test viene utilizzato per filtrare le corrispondenze deboli. Per ogni caratteristica estratta, si confronta il rapporto tra la distanza euclidea della migliore corrispondenza e la distanza euclidea della seconda migliore corrispondenza. Se il rapporto è inferiore a una soglia predefinita, la corrispondenza viene accettata.
+      \end{itemize}
+
       \begin{lstlisting}
-bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
 
-# Match descriptors of the two images
-matches: list[cv2.DMatch] = bf.match(dp1, dp2)
+#...
+# Cicla su tutti i modelli del dataset
+for model in dataset.models:
+    # Cicla su tutte le feature del modello
+    for model_data2 in model.data:
+        k2 = convert_keypoints(model_data2.keypoints)
+        d2 = convert_descriptors(model_data2.descriptors)
 
-# Sort the matches by distance
-matches = sorted(matches, key=lambda x: x.distance)
+        # Crea un oggetto BFMatcher (Brute-Force Matcher)
+        bf = cv2.BFMatcher()
 
-# Set a threshold for selecting good matches
+        # Trova i migliori abbinamenti tra i descrittori dell'immagine di query e del dataset
+        matches = bf.knnMatch(d1, d2, k=2)
 
-if N > 0:
-  matches = matches[:N]
+        # Verifica se ci sono abbastanza abbinamenti
+        if len(matches) < 2:
+            continue
+        # Calcola la distanza media dei migliori abbinamenti
+        total_distance = 0
+        for m, n in matches:
+            total_distance += m.distance
+        
+        average_distance = total_distance / len(matches)
 
-good_matches = [m for m in matches if m.distance < thresh]
+        # Se la distanza media è migliore del miglior match attuale, aggiorna i valori
+        if average_distance < 280 and average_distance < best_match_distance:
+            best_match = model_data.file_name
+            best_match_distance = average_distance
 
-match_img = cv2.drawMatches(img1, kp1, img2, kp2, matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-
+            data[model.name] = average_distance
+#...
       \end{lstlisting}
 
       \newpage
