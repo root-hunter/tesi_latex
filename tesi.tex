@@ -74,9 +74,9 @@
 \textbf{\large Università degli Studi di Bari} \\
 \vspace{0.3cm}
 \textbf{\large Dipartimento di Informatica} \\
-\vspace{1.5cm}
+\vspace{1cm}
 \includegraphics[width=40mm,scale=0.5]{assets/images/logo.png} \\
-\vspace{1.5cm}
+\vspace{1cm}
 \textbf{\large Tesi di Laurea Triennale in Informatica e Tecnologie per la Produzione del Software} \\
 \vspace{1cm}
 \textbf{\LARGE Upgrade del Sistema di Foto Identificazione Automatica SPIR: Porting, Intelligenza Artificiale e Ottimizzazione dell'Interfaccia Utente} \\
@@ -92,7 +92,7 @@ Dott.ssa \textbf{Rosalia Maglietta} \\
 Dott.ssa \textbf{Carla Cherubini} \\
 \vfill
 \vspace{0.3cm}
-\textbf{\large Anno Accademico 2022/2023} % Inserisci l'anno accademico corretto
+\textbf{ Anno Accademico 2022/2023} % Inserisci l'anno accademico corretto
     
 \end{titlepage}
 \clearpage
@@ -456,7 +456,7 @@ snr = 10 * np.log10(signal_energy / noise_energy)
       \end{minipage}
     \end{figure}
     
-    Per migliorare la qualità complessiva delle maschere estratte da passare alla fase di feature extraction,
+    Per migliorare la qualità complessiva delle maschere estratte da passare alla fase di features extraction,
     si sceglie di porre diversi livelli di filtraggio con relativi parametri soglia.
     Un secondo controllo viene dunque effettuato sulla maschera generata. Se 
     dopo tutti i passaggi di ottimizzazione della maschera (compresa l'eliminazione di
@@ -506,9 +506,9 @@ return model
     \end{figure}
 
     A questo punto la maschera della pinna del delfino è stata estratta, 
-    ora si può passare alla fase di feature extraction. Nello specifico l'algoritmo utilizzato 
+    ora si può passare alla fase di features extraction. Nello specifico l'algoritmo utilizzato 
     è Scale Invariant Feature Transform (SIFT), lo stesso della versione MATLAB,
-    anche se nel corso dello sviluppo sono stati testati i seguenti algorimti di feature extraction:
+    anche se nel corso dello sviluppo sono stati testati i seguenti algorimti di features extraction:
     \begin{itemize}
       \item SIFT (Scale-Invariant Feature Transform \cite{lowe2004distinctive}): L'algoritmo SIFT è ampiamente utilizzato per estrarre features invarianti rispetto alla scala e alla rotazione. Rileva punti di interesse in un'immagine, calcola le loro descrizioni basate su gradienti di intensità e crea una rappresentazione compatta delle features. SIFT è noto per la sua robustezza rispetto alle variazioni di scala, rotazione, illuminazione e occlusioni.
       \item ORB (Oriented FAST and Rotated BRIEF \cite{rublee2011orb}): L'algoritmo ORB combina le caratteristiche di rilevazione rapida degli angoli (FAST) e il descrittore binario BRIEF. È un algoritmo efficiente che estrae features invarianti rispetto alla scala e all'orientazione. ORB utilizza un rilevatore di angoli per individuare punti di interesse, calcola gli orientamenti locali e genera descrittori binari per le feature.
@@ -849,16 +849,16 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
       \caption{Python SPIR matches}
     \end{figure}
 
-    La versione Python del sistema SPIR ha mostrato risultati promettenti in termini di match delle feature. Grazie all'implementazione ottimizzata e alle migliorate tecniche di estrazione delle maschere, il sistema è stato in grado di ottenere un alto tasso di successo nel match delle feature tra le immagini di delfini.
+    La versione Python del sistema SPIR ha mostrato risultati promettenti in termini di match delle feature. Grazie all'implementazione ottimizzata e alle migliorate tecniche di estrazione delle maschere, il sistema è stato in grado di ottenere un alto tasso di successo nel match delle features tra le immagini di delfini.
     I risultati positivi ottenuti con la versione Python di SPIR hanno aperto nuove prospettive e opportunità per l'applicazione del sistema. La sua efficacia nel riconoscimento dei delfini attraverso le feature delle pinne può essere sfruttata in diversi ambiti, come la ricerca e il monitoraggio delle popolazioni di delfini, la conservazione della fauna marina e la gestione degli habitat.
     Inoltre, i risultati dei match ottenuti con la versione Python di SPIR consentono anche di considerare l'integrazione del sistema in altre piattaforme e ambienti. La flessibilità e la portabilità offerte dalla versione Python consentono di adattare il sistema per l'utilizzo su dispositivi mobili o in ambienti distribuiti, aprendo nuove prospettive per l'applicazione pratica del sistema nel campo della ricerca e della conservazione dei delfini.
-    È importante notare che, nonostante i risultati promettenti ottenuti con la versione Python di SPIR, ci sono casi in cui non riesce a superare le prestazioni della versione Matlab. Questo apre interessanti scenari per futuri miglioramenti e ottimizzazioni della fase di match delle feature.
+    È importante notare che, nonostante i risultati promettenti ottenuti con la versione Python di SPIR, ci sono casi in cui non riesce a superare le prestazioni della versione Matlab. Questo apre interessanti scenari per futuri miglioramenti e ottimizzazioni della fase di match delle features.
 
-    Sebbene la versione Python di SPIR abbia dimostrato buone prestazioni nella maggior parte dei casi, ci sono situazioni (CARMELO) in cui la versione Matlab ha mostrato un margine di miglioramento rispetto alla precisione del match delle feature. Questo può essere dovuto a varie ragioni, come differenze nell'implementazione degli algoritmi o nell'ottimizzazione delle operazioni.
+    Sebbene la versione Python di SPIR abbia dimostrato buone prestazioni nella maggior parte dei casi, ci sono situazioni (CARMELO) in cui la versione Matlab ha mostrato un margine di miglioramento rispetto alla precisione del match delle features. Questo può essere dovuto a varie ragioni, come differenze nell'implementazione degli algoritmi o nell'ottimizzazione delle operazioni.
     
     \newpage
     \subsection{Prestazioni}
-    Specifiche configurazione di test:
+    Specifiche ambiente di test:
 
     \begin{itemize}
       \item Processore: AMD 4800H
