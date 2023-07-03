@@ -121,7 +121,7 @@
   \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{assets/images/intro/intro.jpeg}   
-    \caption{Esemplate di delfino Risso}
+    \caption{Esemplare di delfino Risso}
   \end{figure}
 
   Tra gli innumerevoli fattori responsabili di tali cambiamenti sono annoverati
@@ -466,9 +466,9 @@ snr = 10 * np.log10(signal_energy / noise_energy)
       \end{minipage}
     \end{figure}
     
-    Per migliorare la qualità complessiva delle pinne estratte da passare alla fase di feature extraction,
-    si sceglie di porre diversi livelli di filtraggio con relativi parametri soglia,
-    un controllo viene effetuato sulla maschera generata, ovvero, se 
+    Per migliorare la qualità complessiva delle maschere estratte da passare alla fase di feature extraction,
+    si sceglie di porre diversi livelli di filtraggio con relativi parametri soglia.
+    Un secondo controllo viene dunque effettuato sulla maschera generata. Se 
     dopo tutti i passaggi di ottimizzazione della maschera (compresa l'eliminazione di
     segmenti), l'area della maschera non rispetta la seguente disequazione:
     \begin{minipage}{1\textwidth}
@@ -476,7 +476,7 @@ snr = 10 * np.log10(signal_energy / noise_energy)
       $minFinArea \leq finArea \leq maxFinArea$
     \end{minipage}
     
-    Allora l'immagine sarà scartata, dato che sicuramente l'estrazione della maschera
+    allora l'immagine sarà scartata, dato che sicuramente l'estrazione della maschera
     non avrà correttamente segmentato la pinna del delfino, sia in caso di eccesso o assenza di area.
     
     \begin{lstlisting}
@@ -494,7 +494,7 @@ return model
     \end{lstlisting}
     \newpage
    
-    \subsection{Estrazione feature}
+    \subsection{Estrazione delle features}
     \begin{figure}[H]
       
       \centering
@@ -511,17 +511,17 @@ return model
       \begin{minipage}{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{assets/images/methods/porting/features_extraction/features.png}   
-        \caption{Feature estratte}
+        \caption{Features estratte}
       \end{minipage}
     \end{figure}
 
     A questo punto la maschera della pinna del delfino è stata estratta, 
-    ora si può passare alla fase di feature extraction, nello specifico l'algoritmo utilizzato 
+    ora si può passare alla fase di feature extraction. Nello specifico l'algoritmo utilizzato 
     è Scale Invariant Feature Transform (SIFT), lo stesso della versione MATLAB,
     anche se nel corso dello sviluppo sono stati testati i seguenti algorimti di feature extraction:
     \begin{itemize}
-      \item SIFT (Scale-Invariant Feature Transform \cite{lowe2004distinctive}): L'algoritmo SIFT è ampiamente utilizzato per estrarre feature invarianti rispetto alla scala e alla rotazione. Rileva punti di interesse in un'immagine, calcola le loro descrizioni basate su gradienti di intensità e crea una rappresentazione compatta delle feature. SIFT è noto per la sua robustezza rispetto alle variazioni di scala, rotazione, illuminazione e occlusioni.
-      \item ORB (Oriented FAST and Rotated BRIEF \cite{rublee2011orb}): L'algoritmo ORB combina le caratteristiche di rilevazione rapida degli angoli (FAST) e il descrittore binario BRIEF. È un algoritmo efficiente che estrae feature invarianti rispetto alla scala e all'orientazione. ORB utilizza un rilevatore di angoli per individuare punti di interesse, calcola gli orientamenti locali e genera descrittori binari per le feature.
+      \item SIFT (Scale-Invariant Feature Transform \cite{lowe2004distinctive}): L'algoritmo SIFT è ampiamente utilizzato per estrarre features invarianti rispetto alla scala e alla rotazione. Rileva punti di interesse in un'immagine, calcola le loro descrizioni basate su gradienti di intensità e crea una rappresentazione compatta delle features. SIFT è noto per la sua robustezza rispetto alle variazioni di scala, rotazione, illuminazione e occlusioni.
+      \item ORB (Oriented FAST and Rotated BRIEF \cite{rublee2011orb}): L'algoritmo ORB combina le caratteristiche di rilevazione rapida degli angoli (FAST) e il descrittore binario BRIEF. È un algoritmo efficiente che estrae features invarianti rispetto alla scala e all'orientazione. ORB utilizza un rilevatore di angoli per individuare punti di interesse, calcola gli orientamenti locali e genera descrittori binari per le feature.
       \newpage
       \item BRISK (Binary Robust Invariant Scalable Keypoints \cite{leutenegger2011brisk}): L'algoritmo BRISK è un metodo basato su descrittori binari che utilizza un rilevatore adattativo di punti di interesse. BRISK calcola un set di punti di interesse utilizzando un rilevatore adattativo basato su una rappresentazione piramidale dell'immagine. Successivamente, calcola i descrittori binari basati su informazioni di intensità e orientazione.
       \item AKAZE (Accelerated-KAZE \cite{alcantarilla2012fast}): L'algoritmo AKAZE è una variante accelerata dell'algoritmo KAZE, che a sua volta si basa sulla rilevazione di blob multiscale e sul calcolo di descrittori basati su regioni. AKAZE è noto per la sua robustezza alle variazioni di scala, rotazione, rumore e cambiamenti di illuminazione.
@@ -531,36 +531,35 @@ return model
 gray_fin = cv2.cvtColor(fin, cv2.COLOR_BGR2GRAY)
 
 #Vengono estratti keypoint e descrittori
-#In modo analogo si estraggone le feature con ORB, BRISK e AKAZE
+#In modo analogo si estraggone le features con ORB, BRISK e AKAZE
 sift = cv2.SIFT_create()
 sift_keypoints, sift_descriptors = sift.detectAndCompute(gray_fin, None)
 
 # Calcola la varianza dei descrittori
 variances = np.var(sift_descriptors, axis=1)
 
-# Soglia per la varianza per selezionare le feature importanti
+# Soglia per la varianza per selezionare le features importanti
 variance_threshold = 0.1
 
-# Seleziona solo le feature con varianza superiore alla soglia
+# Seleziona solo le features con varianza superiore alla soglia
 selected_indices = np.where(variances > variance_threshold)[0]
 sift_keypoints = [sift_keypoints[i] for i in selected_indices]
 sift_descriptors = sift_descriptors[selected_indices]
 \end{lstlisting}
-      L'utilizzo della varianza come criterio per la selezione delle feature si basa su una considerazione matematica fondamentale:
+      L'utilizzo della varianza come criterio per la selezione delle features si basa su una considerazione matematica fondamentale:
       la varianza misura la dispersione dei dati intorno alla loro media.
       In termini di feature extraction, la varianza può essere utilizzata 
-      per valutare quanto le feature variano all'interno di un set di dati.
-      Feature con varianza alta indicano una maggiore variabilità dei valori,
-      mentre feature con varianza bassa indicano una minore variabilità dei valori.
-      L'idea di utilizzare la varianza per selezionare le feature 
-      più importanti si basa sul presupposto che le feature più rilevanti 
-      per un determinato compito o problema presentano una maggiore variabilità rispetto alle feature meno rilevanti.
-      Pertanto, selezionando le feature con una varianza superiore a una soglia specificata, 
-      si tende a mantenere le feature che portano informazioni significative.
-      \subsection{Salvataggio feature}
-      Il salvataggio delle feature estratte è stato implementato tramite Protocol Buffer (protobuf
-      ) \cite{protobuf},
-      è un meccanismo di serializzazione dei dati sviluppato da Google.
+      per valutare quanto le features variano all'interno di un set di dati.
+      Features con varianza alta indicano una maggiore variabilità dei valori,
+      mentre features con varianza bassa indicano una minore variabilità dei valori.
+      L'idea di utilizzare la varianza per selezionare le features 
+      più importanti si basa sul presupposto che le features più rilevanti 
+      per un determinato compito o problema presentano una maggiore variabilità rispetto alle features meno rilevanti.
+      Pertanto, selezionando le features con una varianza superiore a una soglia specificata, 
+      si tende a mantenere le features che portano informazioni significative.
+      \subsection{Salvataggio delle features}
+      Il salvataggio delle features estratte è stato implementato tramite Protocol Buffer (protobuf
+      ) \cite{protobuf} che è un meccanismo di serializzazione dei dati sviluppato da Google.
       È un formato di scambio di dati binario che consente di definire la struttura 
       dei dati in modo dichiarativo utilizzando un file di definizione del protocollo (.proto).
       Questo file di definizione specifica i tipi di dati e i messaggi che possono essere trasmessi utilizzando Protobuf.
@@ -575,24 +574,19 @@ sift_descriptors = sift_descriptors[selected_indices]
         \item Tipizzazione forte: Protobuf definisce tipi di dati specifici nel file di definizione del protocollo, consentendo una tipizzazione forte durante la serializzazione e deserializzazione dei dati. Ciò offre un maggiore controllo sui dati trasmessi e contribuisce a ridurre gli errori di interpretazione dei dati.
       \end{itemize}
       \newpage
-      \subsection{Match feature}
-      \begin{figure}[H]
-        \centering
-        \centering
-        \includegraphics[width=\textwidth]{/home/roothunter/Documents/Tesi/latex/assets/images/methods/porting/features_match/match.png}   
-        \caption{Match delle feature}
-      \end{figure}
+      \subsection{Match delle features estratte}
+
 
 
       Dopo il salvataggio del dataset contenente tutti i keypoint e descrittori 
       \\ per ogni immagine, raggruppati per nome del delfino (modello), si è passato ad implementare il match con OpenCV. \\
-      In OpenCV, ci sono diverse strategie di match di feature che possono essere utilizzate per confrontare e cercare corrispondenze tra le caratteristiche estratte da diverse immagini. Di seguito sono elencate alcune delle strategie più comuni:
+      In OpenCV, ci sono diverse strategie di match di features che possono essere utilizzate per confrontare e cercare corrispondenze tra le caratteristiche estratte da diverse immagini. Di seguito sono elencate alcune delle strategie più comuni:
 
       \begin{itemize}
         \item Brute-Force Matching: Questa è la strategia più semplice, in cui ogni caratteristica estratta dall'immagine di query viene confrontata con tutte le caratteristiche estratte dall'immagine di train. Questo metodo può essere computazionalmente costoso se il numero di caratteristiche è elevato.
         \newpage
-        \item K-Nearest Neighbors (KNN) Matching \cite{knn}: Invece di confrontare ogni caratteristica con tutte le caratteristiche dell'immagine di train, questo approccio seleziona i K punti più vicini (più simili) per ogni caratteristica estratta dall'immagine di query. Può essere usato il modulo FlannBasedMatcher per utilizzare un algoritmo di ricerca dell'albero kd-tree per migliorare l'efficienza.
-        \item RANSAC (Random Sample Consensus) \cite{ransac}: È una tecnica robusta per stimare i parametri di un modello matematico da un set di dati che contiene outlier. Nell'ambito del match di feature, RANSAC può essere utilizzato per stimare la trasformazione geometrica (ad esempio, una trasformazione affina o una trasformazione prospettica) tra due immagini.
+        \item K-Nearest Neighbors (KNN) Matching \cite{knn}: Invece di confrontare ogni caratteristica dell'immagine di query con tutte le caratteristiche dell'immagine di train, questo approccio seleziona i K punti più vicini (più simili) per ogni caratteristica estratta dall'immagine di query. Può essere usato il modulo FlannBasedMatcher per utilizzare un algoritmo di ricerca dell'albero kd-tree per migliorare l'efficienza.
+        \item RANSAC (Random Sample Consensus) \cite{ransac}: È una tecnica robusta per stimare i parametri di un modello matematico da un set di dati che contiene outlier. Nell'ambito del match di features, RANSAC può essere utilizzato per stimare la trasformazione geometrica (ad esempio, una trasformazione affina o una trasformazione prospettica) tra due immagini.
         \item Lowe's Ratio Test \cite{lowe2004distinctive}: Questo test viene utilizzato per filtrare le corrispondenze deboli. Per ogni caratteristica estratta, si confronta il rapporto tra la distanza euclidea della migliore corrispondenza e la distanza euclidea della seconda migliore corrispondenza. Se il rapporto è inferiore a una soglia predefinita, la corrispondenza viene accettata.
       \end{itemize}
 
@@ -602,7 +596,7 @@ sift_descriptors = sift_descriptors[selected_indices]
 #...
 # Cicla su tutti i modelli del dataset
 for model in dataset.models:
-    # Cicla su tutte le feature del modello
+    # Cicla su tutte le s del modello
     for model_data2 in model.data:
         k2 = convert_keypoints(model_data2.keypoints)
         d2 = convert_descriptors(model_data2.descriptors)
@@ -631,14 +625,14 @@ for model in dataset.models:
             data[model.name] = average_distance
 #...
       \end{lstlisting}
-      La strategia KNN (K-Nearest Neighbors) è stata scelta per effettuare il match delle feature estratte dalle pinne di delfino per diversi motivi. Il KNN è un algoritmo di apprendimento supervisionato utilizzato per la classificazione e il riconoscimento dei pattern. 
+      La strategia KNN (K-Nearest Neighbors) è stata scelta per effettuare il match delle features estratte dalle pinne di delfino per diversi motivi. Il KNN è un algoritmo di apprendimento supervisionato utilizzato per la classificazione e il riconoscimento dei pattern. 
       \newpage
-      È un metodo semplice ma efficace per la classificazione basata sulla vicinanza dei punti nel suo spazio delle feature.
-      Nel contesto del riconoscimento delle pinne di delfino, le feature estratte, come ad esempio i descrittori SIFT (Scale-Invariant Feature Transform), rappresentano le caratteristiche distintive delle pinne. Queste feature possono includere informazioni come orientamento, forma e disposizione dei punti chiave delle pinne.
-      L'obiettivo principale di utilizzare l'algoritmo KNN in questo caso è quello di trovare le corrispondenze più simili tra le feature estratte dalle diverse pinne. Il funzionamento del KNN prevede che, dato un punto di input (cioè una feature estratta da una pinna), l'algoritmo confronti questo punto con i punti di allenamento (feature estratte da altre pinne) e determini i "K" punti di allenamento più vicini in base a una misura di distanza. In seguito, il punto di input viene classificato in base alla maggioranza dei K punti di allenamento più vicini.
-      Nel caso delle pinne di delfino, l'algoritmo KNN può essere utilizzato per confrontare le feature estratte da una pinna con un insieme di feature di pinne di delfino precedentemente raccolte e classificate (dataset). In altre parole, le feature estratte dalle pinne di delfino sconosciute possono essere confrontate con le feature delle pinne di delfino note, e l'algoritmo KNN può essere utilizzato per determinare a quale pinna conosciuta la pinna sconosciuta è più simile.
+      È un metodo semplice ma efficace per la classificazione basata sulla vicinanza dei punti nel suo spazio delle features.
+      Nel contesto del riconoscimento delle pinne di delfino, le features estratte, come ad esempio i descrittori SIFT (Scale-Invariant Feature Transform), rappresentano le caratteristiche distintive delle pinne. Queste features possono includere informazioni come orientamento, forma e disposizione dei punti chiave delle pinne.
+      L'obiettivo principale di utilizzare l'algoritmo KNN in questo caso è quello di trovare le corrispondenze più simili tra le features estratte dalle diverse pinne. Il funzionamento del KNN prevede che, dato un punto di input (cioè una features estratta da una pinna), l'algoritmo confronti questo punto con i punti di allenamento (features estratte da altre pinne) e determini i "K" punti di allenamento più vicini in base a una misura di distanza. In seguito, il punto di input viene classificato in base alla maggioranza dei K punti di allenamento più vicini.
+      Nel caso delle pinne di delfino, l'algoritmo KNN può essere utilizzato per confrontare le features estratte da una pinna non identificata con un insieme di features di pinne di delfino precedentemente raccolte e classificate (dataset). In altre parole, le features estratte dalle pinne di delfino sconosciute possono essere confrontate con le features delle pinne di delfino note, e l'algoritmo KNN può essere utilizzato per determinare a quale pinna conosciuta la pinna sconosciuta è più simile.
       La scelta del valore "K" nel KNN è importante e dipende dal contesto specifico. Un valore "K" più piccolo può portare a una classificazione più sensibile al rumore o alle variazioni casuali, mentre un valore "K" più grande può portare a una classificazione più robusta ma potenzialmente meno sensibile alle differenze sottili tra le pinne.
-      In sintesi, la strategia KNN è stata scelta per il match delle feature estratte dalle pinne di delfino perché permette di confrontare le caratteristiche distintive delle pinne sconosciute con quelle delle pinne conosciute, consentendo di identificare la corrispondenza più simile.
+      In sintesi, la strategia KNN è stata scelta per il match delle features estratte dalle pinne di delfino perché permette di confrontare le caratteristiche distintive delle pinne sconosciute con quelle delle pinne conosciute, consentendo di identificare la corrispondenza più simile.
 
 
 
@@ -764,12 +758,12 @@ class Augment(tf.keras.layers.Layer):
     
     \subsection{Architettura}
 
-    L'adozione di un'architettura client/server, con il server responsabile dell'estrazione delle feature e del matching, è una scelta strategica che deriva da una serie di fattori chiave. Questa architettura è stata selezionata per garantire una distribuzione efficiente del lavoro, una gestione centralizzata delle funzionalità complesse, un controllo sicuro, una scalabilità ottimale e una migliore interoperabilità.
-    La prima ragione fondamentale per cui è stata adottata un'architettura client/server è la distribuzione del carico di lavoro. L'estrazione delle feature e il matching possono richiedere risorse computazionali considerevoli, come il tempo di calcolo e la capacità di elaborazione. Distribuire queste operazioni tra client e server permette di bilanciare il carico di lavoro in modo più equo. Il server, con la sua maggiore potenza di calcolo e scalabilità, può dedicarsi all'elaborazione intensiva, mentre il client si concentra sull'interazione con l'utente e sfrutta i risultati ottenuti dal server.
+    L'adozione di un'architettura client/server, con il server responsabile dell'estrazione delle features e del matching, è una scelta strategica che deriva da una serie di fattori chiave. Questa architettura è stata selezionata per garantire una distribuzione efficiente del lavoro, una gestione centralizzata delle funzionalità complesse, un controllo sicuro, una scalabilità ottimale e una migliore interoperabilità.
+    La prima ragione fondamentale per cui è stata adottata un'architettura client/server è la distribuzione del carico di lavoro. L'estrazione delle features e il matching possono richiedere risorse computazionali considerevoli, come il tempo di calcolo e la capacità di elaborazione. Distribuire queste operazioni tra client e server permette di bilanciare il carico di lavoro in modo più equo. Il server, con la sua maggiore potenza di calcolo e scalabilità, può dedicarsi all'elaborazione intensiva, mentre il client si concentra sull'interazione con l'utente e sfrutta i risultati ottenuti dal server.
     \\
-    In secondo luogo, l'architettura client/server consente una gestione centralizzata delle funzionalità complesse. L'estrazione delle feature e il matching richiedono algoritmi sofisticati e un'elaborazione avanzata dei dati. Concentrare queste funzionalità nel server permette di mantenere una base di codice specializzata e centralizzata. Inoltre, gli aggiornamenti o le migliorie all'algoritmo possono essere implementati in modo efficiente sul server, evitando la necessità di apportare modifiche a tutti i client.
+    In secondo luogo, l'architettura client/server consente una gestione centralizzata delle funzionalità complesse. L'estrazione delle features e il matching richiedono algoritmi sofisticati e un'elaborazione avanzata dei dati. Concentrare queste funzionalità nel server permette di mantenere una base di codice specializzata e centralizzata. Inoltre, gli aggiornamenti o le migliorie all'algoritmo possono essere implementati in modo efficiente sul server, evitando la necessità di apportare modifiche a tutti i client.
     \\
-    La scalabilità è un fattore determinante per l'adozione di un'architettura client/server. Affinché il sistema sia in grado di gestire un elevato numero di utenti o un'intensa attività di estrazione delle feature e matching, è necessario distribuire il carico di lavoro su più risorse server. Ciò consente di adattarsi alle crescenti esigenze del sistema e di garantire prestazioni affidabili e tempi di risposta rapidi.
+    La scalabilità è un fattore determinante per l'adozione di un'architettura client/server. Affinché il sistema sia in grado di gestire un elevato numero di utenti o un'intensa attività di estrazione delle features e matching, è necessario distribuire il carico di lavoro su più risorse server. Ciò consente di adattarsi alle crescenti esigenze del sistema e di garantire prestazioni affidabili e tempi di risposta rapidi.
 
     \subsection{Backend}
     gRPC \cite{grpc} è un framework di comunicazione remota sviluppato da Google. È basato su HTTP/2 e utilizza Protocol Buffers (protobuf) come formato di serializzazione dei dati. gRPC offre un modo efficiente e scalabile per la comunicazione tra client e server in un'architettura distribuita. Ecco alcuni dei vantaggi principali di basare un server su gRPC:
@@ -787,7 +781,7 @@ class Augment(tf.keras.layers.Layer):
     \subsection{Frontend}
     Flutter \cite{flutter} è stato scelto come framework client per il sistema per diversi motivi chiave.
     Innanzitutto, offre prestazioni native di alta qualità, garantendo che le app sviluppate con Flutter siano veloci, reattive e abbiano un'esperienza utente ottimale. Grazie alla sua architettura, Flutter consente alle app di interagire direttamente con il sistema operativo sottostante, eliminando la necessità di un bridge e garantendo prestazioni ottimali.
-    Uno dei fattori principali che ha guidato la scelta del framework è rappresentato dalle prestazioni native di Flutter. Grazie alla sua architettura, Flutter consente alle app di raggiungere prestazioni elevate e reattività, garantendo un'esperienza utente di qualità. Questo è particolarmente importante per un'applicazione che richiede l'estrazione delle feature e il matching, in cui la velocità e l'efficienza sono fondamentali.
+    Uno dei fattori principali che ha guidato la scelta del framework è rappresentato dalle prestazioni native di Flutter. Grazie alla sua architettura, Flutter consente alle app di raggiungere prestazioni elevate e reattività, garantendo un'esperienza utente di qualità. Questo è particolarmente importante per un'applicazione che richiede l'estrazione delle features e il matching, in cui la velocità e l'efficienza sono fondamentali.
     \\
 
     \begin{figure}[H]
@@ -811,7 +805,7 @@ class Augment(tf.keras.layers.Layer):
 
     \newpage
       
-    L'utilizzo di gRPC in combinazione con Flutter consente una comunicazione efficiente e performante tra il client e il server. In particolare, il supporto per lo streaming bidirezionale offerto da gRPC è vantaggioso per l'estrazione delle feature e il matching, consentendo una comunicazione continua tra il client e il server.
+    L'utilizzo di gRPC in combinazione con Flutter consente una comunicazione efficiente e performante tra il client e il server. In particolare, il supporto per lo streaming bidirezionale offerto da gRPC è vantaggioso per l'estrazione delle features e il matching, consentendo una comunicazione continua tra il client e il server.
     La natura dichiarativa dell'interfaccia utente di Flutter è un altro motivo che ha influenzato la scelta del framework. Con Flutter, l'interfaccia utente viene descritta utilizzando widget, che semplifica la creazione e la personalizzazione di interfacce utente moderne e accattivanti. La funzionalità di Hot Reload di Flutter consente 
      di visualizzare immediatamente le modifiche apportate al codice durante lo sviluppo, consentendo un iterativo e rapido processo di sviluppo.
     \\
