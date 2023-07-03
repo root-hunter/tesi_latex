@@ -74,9 +74,9 @@
 \textbf{\large Università degli Studi di Bari} \\
 \vspace{0.3cm}
 \textbf{\large Dipartimento di Informatica} \\
-\vspace{1.5cm}
+\vspace{1cm}
 \includegraphics[width=40mm,scale=0.5]{assets/images/logo.png} \\
-\vspace{1.5cm}
+\vspace{1cm}
 \textbf{\large Tesi di Laurea Triennale in Informatica e Tecnologie per la Produzione del Software} \\
 \vspace{1cm}
 \textbf{\LARGE Upgrade del Sistema di Foto Identificazione Automatica SPIR: Porting, Intelligenza Artificiale e Ottimizzazione dell'Interfaccia Utente} \\
@@ -92,7 +92,7 @@
 \textbf{Dott.ssa Carla Cherubini} \\
 \vfill
 \vspace{0.3cm}
-\textbf{\large Anno Accademico 2022/2023} % Inserisci l'anno accademico corretto
+\textbf{Anno Accademico 2022/2023} % Inserisci l'anno accademico corretto
     
 \end{titlepage}
 \clearpage
@@ -826,7 +826,7 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
     Per ogni immagine nel dataset, sia l'implementazione in Python che quella in MATLAB sono state utilizzate per estrarre le maschere delle pinne. Successivamente, è stato calcolato l'IOU tra le maschere estratte e le maschere di riferimento presenti nel dataset.
 
     Infine, è stato possibile confrontare le due implementazioni calcolando la media degli incrementi dell'IOU rispetto alla versione precedente.
-    È emerso che l'implementazione in Python ha mostrato un incremento medio dell'IOU di circa il 6\% rispetto all'implementazione precedente in MATLAB.
+    È emerso che l'implementazione in Python ha mostrato un incremento medio dell'IOU di circa il 7\% rispetto all'implementazione precedente in MATLAB.
     Questo suggerisce che la nuova implementazione in Python ha prodotto maschere di pinne di delfino più accurate e simili alle maschere di riferimento presenti nel dataset.
 
     \begin{figure}[H]
@@ -844,7 +844,7 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
     \newpage
 
     \subsection{Prestazioni}
-    Specifiche configurazione di test:
+    Specifiche ambiente di test:
 
     \begin{itemize}
       \item Processore: AMD 4800H
@@ -855,6 +855,8 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
       \item VRAM: 4 GB
       \item OS: Ubuntu 23.04
       \item Linux Kernel: 6.2.16
+      \item Python: 3.11
+      \item MATLAB: R2023a
     \end{itemize}
 
     La nuova implementazione del modulo di estrazione delle maschere scritta in Python ha dimostrato un notevole miglioramento sia in termini di tempo di esecuzione che di qualità delle maschere rispetto alla precedente implementazione basata su MATLAB. Questi risultati sono stati ottenuti grazie all'utilizzo di tecniche più efficienti e all'ottimizzazione delle operazioni di elaborazione delle immagini.
@@ -866,9 +868,18 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
     \end{figure}
     
     Iniziamo analizzando il tempo di esecuzione. La nuova implementazione in Python è riuscita ad accelerare significativamente il processo di estrazione delle maschere rispetto a quella basata su MATLAB. Con un tempo di esecuzione fino a 12 volte minore, il sistema è diventato notevolmente più efficiente, consentendo di analizzare un maggior numero di immagini nel medesimo intervallo di tempo. Questo rappresenta un vantaggio significativo in termini di produttività e possibilità di scalabilità del sistema.
-      
+    
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=\textwidth]{assets/images/results/result_dataset_size.png}   
+      \caption{Dimensione del dataset di feature}
+    \end{figure}
 
-
+    L'implementazione in Python ha portato vantaggi significativi anche in termini di dimensione del dataset contenente le feature rispetto alla versione precedente basata su MATLAB. Infatti, grazie a diverse ottimizzazioni e modifiche apportate al modo di gestire i dati durante la fase di salvataggio, è stato possibile ottenere un notevole miglioramento delle dimensioni del dataset.
+    Uno dei principali fattori che hanno contribuito a questa riduzione della dimensione del dataset è stata l'adozione di una libreria di serializzazione/deserializzazione chiamata Protocol Buffers (protobuf).
+    \\
+    Utilizzando protobuf, è stato possibile ristrutturare il modo in cui le feature venivano salvate nel dataset, eliminando informazioni ridondanti o non necessarie e utilizzando un formato più compatto. Questa ottimizzazione ha portato a un notevole risparmio di spazio e ha permesso di ridurre considerevolmente la dimensione complessiva del dataset.
+    Questa significativa riduzione delle dimensioni del dataset non solo ha comportato un risparmio di spazio di archiviazione, ma ha anche portato a un notevole miglioramento delle prestazioni del sistema. La riduzione della quantità di dati da elaborare ha permesso di accelerare i tempi di esecuzione delle operazioni di caricamento e salvataggio delle feature, contribuendo a una maggiore efficienza complessiva del sistema.
 \chapter{Conclusioni}
   \section{Riepilogo degli obiettivi raggiunti}
   \section{Possibili sviluppi futuri}
