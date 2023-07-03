@@ -74,9 +74,9 @@
 \textbf{\large Università degli Studi di Bari} \\
 \vspace{0.3cm}
 \textbf{\large Dipartimento di Informatica} \\
-\vspace{1cm}
+\vspace{1.5cm}
 \includegraphics[width=40mm,scale=0.5]{assets/images/logo.png} \\
-\vspace{1cm}
+\vspace{1.5cm}
 \textbf{\large Tesi di Laurea Triennale in Informatica e Tecnologie per la Produzione del Software} \\
 \vspace{1cm}
 \textbf{\LARGE Upgrade del Sistema di Foto Identificazione Automatica SPIR: Porting, Intelligenza Artificiale e Ottimizzazione dell'Interfaccia Utente} \\
@@ -92,7 +92,7 @@ Dott.ssa \textbf{Rosalia Maglietta} \\
 Dott.ssa \textbf{Carla Cherubini} \\
 \vfill
 \vspace{0.3cm}
-\textbf{Anno Accademico 2022/2023} % Inserisci l'anno accademico corretto
+\textbf{\large Anno Accademico 2022/2023} % Inserisci l'anno accademico corretto
     
 \end{titlepage}
 \clearpage
@@ -181,7 +181,7 @@ Dott.ssa \textbf{Carla Cherubini} \\
     \item Applica algoritmi di feature extraction in grado di ottenere una 
     rappresentazione dell’identità dell’individuo in termini di "descrittori" calcolati 
     a partire dai graffi presenti sulla pinna (Scale
-    Invariant Feature Transform (SIFT));
+    Invariant Feature Transform (SIFT), \cite{reno2019sift});
     \item Applica algoritmi di feature matching in grado di associare l’identità degli individui presenti 
     nel database di esemplari già identificati a quella degli esemplari da identificare. 
   
@@ -858,7 +858,7 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
     
     \newpage
     \subsection{Prestazioni}
-    Specifiche ambiente di test:
+    Specifiche configurazione di test:
 
     \begin{itemize}
       \item Processore: AMD 4800H
@@ -869,8 +869,6 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
       \item VRAM: 4 GB
       \item OS: Ubuntu 23.04
       \item Linux Kernel: 6.2.16
-      \item Python: 3.10.11
-      \item MATLAB: R2023a
     \end{itemize}
 
     La nuova implementazione del modulo di estrazione delle maschere scritta in Python ha dimostrato un notevole miglioramento sia in termini di tempo di esecuzione che di qualità delle maschere rispetto alla precedente implementazione basata su MATLAB. Questi risultati sono stati ottenuti grazie all'utilizzo di tecniche più efficienti e all'ottimizzazione delle operazioni di elaborazione delle immagini.
@@ -882,25 +880,7 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
     \end{figure}
     
     Iniziamo analizzando il tempo di esecuzione. La nuova implementazione in Python è riuscita ad accelerare significativamente il processo di estrazione delle maschere rispetto a quella basata su MATLAB. Con un tempo di esecuzione fino a 12 volte minore, il sistema è diventato notevolmente più efficiente, consentendo di analizzare un maggior numero di immagini nel medesimo intervallo di tempo. Questo rappresenta un vantaggio significativo in termini di produttività e possibilità di scalabilità del sistema.
-    
-  
-
-    L'implementazione in Python ha portato vantaggi significativi anche in termini di dimensione del dataset contenente le feature rispetto alla versione precedente basata su MATLAB. Infatti, grazie a diverse ottimizzazioni e modifiche apportate al modo di gestire i dati durante la fase di salvataggio, è stato possibile ottenere un notevole miglioramento delle dimensioni del dataset.
-    Uno dei principali fattori che hanno contribuito a questa riduzione della dimensione del dataset è stata l'adozione di una libreria di serializzazione/deserializzazione chiamata Protocol Buffers (protobuf).
-    \\
-    Utilizzando protobuf, è stato possibile ristrutturare il modo in cui le feature venivano salvate nel dataset, eliminando informazioni ridondanti o non necessarie e utilizzando un formato più compatto. Questa ottimizzazione ha portato a un notevole risparmio di spazio e ha permesso di ridurre considerevolmente la dimensione complessiva del dataset.
-    Questa significativa riduzione delle dimensioni del dataset non solo ha comportato un risparmio di spazio di archiviazione, ma ha anche portato a un notevole miglioramento delle prestazioni del sistema. La riduzione della quantità di dati da elaborare ha permesso di accelerare i tempi di esecuzione delle operazioni di caricamento e salvataggio delle feature, contribuendo a una maggiore efficienza complessiva del sistema.
-    
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=\textwidth]{assets/images/results/result_dataset_size.png}   
-      \caption{Dimensione del dataset di feature}
-    \end{figure}
-
-    L'impressionante miglioramento della dimensione del dataset e dei tempi di esecuzione ottenuto grazie all'implementazione in Python ha aperto interessanti opportunità per l'architettura client/server e l'adozione di dispositivi mobili.
-
-    L'adozione di dispositivi mobili viene favorita dalla riduzione delle dimensioni del dataset e dai tempi di elaborazione più rapidi. La riduzione della quantità di dati da trasferire e processare consente ai dispositivi mobili di utilizzare meno risorse, come la larghezza di banda e la potenza di calcolo, preservando la durata della batteria e migliorando le prestazioni complessive dell'applicazione. Inoltre, i dispositivi mobili possono beneficiare dell'elaborazione in tempo reale delle feature estratte, consentendo esperienze interattive e immediate per gli utenti.
-    Grazie alla riduzione delle dimensioni del dataset, il trasferimento dei dati tra client e server diventa più efficiente. I dati compressi possono essere trasmessi più rapidamente attraverso la rete, riducendo la latenza e migliorando l'esperienza utente. Ciò rende l'architettura client/server ancora più adatta per applicazioni che richiedono l'elaborazione di grandi quantità di dati, come ad esempio l'identificazione automatica delle foto di cui si sta discutendo.
+      
 \chapter{Conclusioni}
   \section{Riepilogo degli obiettivi raggiunti}
     Durante lo studio e il porting del sistema di foto identificazione automatica SPIR da MATLAB a Python, sono stati raggiunti diversi obiettivi. L'obiettivo principale era realizzare il porting della versione originale del sistema SPIR utilizzando il linguaggio di programmazione Python. Ciò è stato ottenuto con successo, consentendo di beneficiare delle numerose librerie e dell'ampia comunità di sviluppatori associate a Python.
