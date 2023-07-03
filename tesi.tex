@@ -171,6 +171,22 @@
   applicare la tecnica di foto-identificazione agli esemplari di grampo. Ogni animale presenta un pattern di segni unico che lo 
   contraddistingue individualmente all'interno della popolazione.
 
+  L'originale versione del sistema SPIR (MATLAB) consente di effettuare l’identificazione degli esemplari di 
+  grampo non noti basandosi su un dataset di esemplari precedentemente identificati senza alcun intervento da parte dell’utente. SPIR opera secondo i seguenti 
+  step principali:
+  \begin{itemize}
+    \item Utilizza in input immagini contenenti una pinna dorsale, ritagliate ad hoc a 
+    partire dagli scatti collezionati durante le campagne di raccolta dati
+    in mare;      
+    \item Applica algoritmi di feature extraction in grado di ottenere una 
+    rappresentazione dell’identità dell’individuo in termini di "descrittori" calcolati 
+    a partire dai graffi presenti sulla pinna (Scale
+    Invariant Feature Transform (SIFT));
+    \item Applica algoritmi di feature matching in grado di associare l’identità degli individui presenti 
+    nel database di esemplari già identificati a quella degli esemplari da identificare. 
+  
+  \end{itemize}
+
   Gli obiettivi di questo lavoro sono: 
   \begin{itemize}
     \item Realizzare il porting della versione originale del sistema di foto identificazione automatica SPIR.
@@ -178,38 +194,6 @@
     \item Sviluppare un'interfaccia grafica che renda il nuovo sistema SPIR user-friendly.
 
   \end{itemize}
-
-
-
-  \section{Stato dell'arte}
-    \subsection{Elaborazione delle immagini}
-      La manipolazione e l'elaborazione delle immagini svolgono un ruolo fondamentale in numerosi settori, tra cui la visione artificiale, la grafica computazionale e l'analisi di immagini biomediche. 
-      In quest'ambito, gli operatori morfologici e logici giocano un ruolo chiave nella modifica e nell'estrazione di informazioni significative da immagini digitali. \\
-      Gli operatori morfologici sono basati sulla teoria della morfologia matematica e vengono utilizzati per la manipolazione di forme geometriche all'interno di un'immagine. \\
-      Essi consentono di eseguire operazioni come l'erosione, la dilatazione, l'apertura e la chiusura, che possono essere utilizzate per rimuovere rumore, riempire buchi o separare oggetti connessi. \\
-      L'erosione riduce le regioni di colore o intensità nell'immagine, mentre la dilatazione le amplia. L'apertura è una combinazione di erosione seguita da dilatazione e viene utilizzata per rimuovere piccoli oggetti o dettagli indesiderati. La chiusura, al contrario, consiste in una dilatazione seguita da erosione ed è utile per riempire buchi o connettere regioni separate.
-      Parallelamente agli operatori morfologici, gli operatori logici sono ampiamente utilizzati per combinare e confrontare immagini. Gli operatori logici fondamentali includono l'AND, l'OR e il NOT, che consentono di creare maschere o combinare informazioni da diverse immagini. \\
-      Ad esempio, l'operatore AND può essere utilizzato per identificare le regioni comuni tra due immagini, mentre l'operatore OR può essere impiegato per unire due immagini sovrapposte in una sola immagine risultante. \\
-      L'operatore NOT, invece, inverte i valori di pixel di un'immagine, consentendo di creare effetti speciali o evidenziare determinate regioni.
-    \subsection{Feature Extraction}
-    \subsection{Object Segmentation}
-    \subsection{User Interface}
-    \subsection{SPIR}
-    L'originale versione del sistema SPIR (MATLAB) consente di effettuare l’identificazione degli esemplari di 
-    grampo non noti basandosi su un dataset di esemplari precedentemente identificati senza alcun intervento da parte dell’utente. SPIR opera secondo i seguenti 
-    step principali:
-    \begin{itemize}
-      \item Utilizza in input immagini contenenti una pinna dorsale, ritagliate ad hoc a 
-      partire dagli scatti collezionati durante le campagne di raccolta dati
-      in mare;      
-      \item Applica algoritmi di feature extraction in grado di ottenere una 
-      rappresentazione dell’identità dell’individuo in termini di "descrittori" calcolati 
-      a partire dai graffi presenti sulla pinna (Scale
-      Invariant Feature Transform (SIFT));
-      \item Applica algoritmi di feature matching in grado di associare l’identità degli individui presenti 
-      nel database di esemplari già identificati a quella degli esemplari da identificare. 
-    
-    \end{itemize}
 
   \section{Obiettivi}
 
@@ -579,7 +563,7 @@ sift_descriptors = sift_descriptors[selected_indices]
       \begin{figure}[H]
         \centering
         \centering
-        \includegraphics[width=\textwidth]{/home/roothunter/Documents/Tesi/latex/assets/images/methods/porting/features_match/match.png}   
+        \includegraphics[width=\textwidth]{assets/images/methods/porting/features_match/match.png}   
         \caption{Match delle feature}
       \end{figure}
 
@@ -841,6 +825,11 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
     Questo suggerisce che la nuova implementazione in Python ha prodotto maschere di pinne di delfino più accurate e simili alle maschere di riferimento presenti nel dataset.
     \subsection{Matching features}
     \subsection{Prestazioni}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{assets/images/results/result_execution_time.png}   
+        \caption{Tempi di esecuzione estrazione maschere}
+      \end{figure}
 
 \chapter{Conclusioni}
   \section{Riepilogo degli obiettivi raggiunti}
