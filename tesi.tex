@@ -819,8 +819,26 @@ class Augment(tf.keras.layers.Layer):
     \\
     L'integrazione di TensorFlow in Flutter consente di eseguire inferenze di reti neurali direttamente sui dispositivi dei client, senza dover inviare i dati al server per l'elaborazione. Questa funzionalità potrebbe aprire nuove possibilità per le applicazioni mobili, consentendo loro di sfruttare la potenza delle reti neurali anche in assenza di una connessione Internet o in situazioni in cui la latenza di rete potrebbe essere un problema.
 \chapter{Risultati sperimentali}
+Lo scopo di questo capitolo è quello di fornire una panoramica completa e accurata dei risultati raccolti, attraverso la presentazione di dati quantitativi, qualitativi o entrambi, derivanti da esperimenti, osservazioni o analisi condotte. Tale esposizione dei risultati è fondamentale per valutare l'efficacia delle metodologie adottate.
+Durante questa analisi e discussione dei risultati, saranno anche evidenziati i limiti dello studio e le possibili fonti di errore o di incertezza che potrebbero aver influenzato i dati ottenuti.
   \section{Confrontro tra i diversi approcci}
     \subsection{Estrazione delle maschere}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=\textwidth]{assets/images/results/result_masks_iou.png}   
+      \caption{Confronto IOU}
+    \end{figure}
+      Per testare e confrontare la nuova implementazione dell'estrazione delle maschere di pinne di delfino fatta in Python rispetto a quella precedente basata su MATLAB, è stata utilizzata come metrica l'IOU (Intersection over Union). L'IOU è una misura di similarità tra due regioni, comunemente utilizzata per valutare la qualità delle maschere generate dai modelli di segmentazione.
+
+    L'IOU viene calcolato dividendo l'area dell'intersezione tra due regioni per l'area dell'unione tra le stesse regioni. In questo contesto, le regioni corrispondono alle maschere poligonali che rappresentano le pinne di delfino. Un valore di IOU pari a 1 indica una perfetta sovrapposizione tra le due maschere, mentre un valore di 0 indica che le maschere non hanno regioni in comune.
+
+    Per confrontare le due versioni di implementazione, è stato utilizzato un dataset di maschere poligonali precedentemente creato per addestrare il modello di deep learning. Questo dataset rappresenta diverse immagini di pinne di delfino, con le relative maschere di riferimento.
+
+    Per ogni immagine nel dataset, sia l'implementazione in Python che quella in MATLAB sono state utilizzate per estrarre le maschere delle pinne. Successivamente, è stato calcolato l'IOU tra le maschere estratte e le maschere di riferimento presenti nel dataset.
+
+    Infine, è stato possibile confrontare le due implementazioni calcolando la media degli incrementi dell'IOU rispetto alla versione precedente.
+    È emerso che l'implementazione in Python ha mostrato un incremento medio dell'IOU di circa il 6\% rispetto all'implementazione precedente in MATLAB.
+    Questo suggerisce che la nuova implementazione in Python ha prodotto maschere di pinne di delfino più accurate e simili alle maschere di riferimento presenti nel dataset.
     \subsection{Matching features}
     \subsection{Prestazioni}
 
