@@ -85,11 +85,11 @@
 \textbf{Antonio Ricciardi} \\
 \vspace{0.3cm}
 \textbf{\large Relatore:} \\
-\textbf{Prof. Giovanni Dimauro} \\
+Prof. \textbf{Giovanni Dimauro} \\
 \vspace{0.3cm}
 \textbf{\large Correlatori:} \\
-\textbf{Dott.ssa Rosalia Maglietta} \\
-\textbf{Dott.ssa Carla Cherubini} \\
+Dott.ssa \textbf{Rosalia Maglietta} \\
+Dott.ssa \textbf{Carla Cherubini} \\
 \vfill
 \vspace{0.3cm}
 \textbf{Anno Accademico 2022/2023} % Inserisci l'anno accademico corretto
@@ -741,8 +741,8 @@ class Augment(tf.keras.layers.Layer):
         \item Utilizzo di convoluzioni e pooling: U-Net utilizza convoluzioni e operazioni di pooling per estrarre progressivamente le caratteristiche delle immagini in diverse profondità. Questo aiuta il modello a identificare gli elementi distintivi delle pinne di delfino e a discriminare tra le regioni di interesse e lo sfondo.
         \item Utilizzo di dati di addestramento limitati: U-Net è stato progettato per funzionare bene anche con dataset di addestramento limitati. La sua architettura compatta e le connessioni skip consentono di ottenere buone prestazioni anche con un numero ridotto di esempi di addestramento.
       \end{itemize}
-    \subsection{Training}
-    \subsection{Generazione maschera}
+    %\subsection{Training}
+    %\subsection{Generazione maschera}
 
     \section{Sistema SPIR}
     \begin{figure}[H]
@@ -810,7 +810,7 @@ class Augment(tf.keras.layers.Layer):
 \chapter{Risultati sperimentali}
 Lo scopo di questo capitolo è quello di fornire una panoramica completa e accurata dei risultati ottenuti, attraverso la presentazione di dati quantitativi, qualitativi o entrambi, derivanti da esperimenti, osservazioni o analisi condotte. Tale esposizione dei risultati è fondamentale per valutare l'efficacia delle metodologie adottate.
 Durante questa analisi e discussione dei risultati, saranno anche evidenziati i limiti dello studio e le possibili fonti di errore o di incertezza che potrebbero aver influenzato i dati ottenuti.
-  \section{Confrontro tra i diversi approcci}
+  \section{Confronto tra i diversi approcci}
     \subsection{Estrazione delle maschere}
     \begin{figure}[H]
       \centering
@@ -840,9 +840,23 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
     \\
     Nel tentativo di affrontare questa sfida, sono state applicate tecniche di data augmentation, che consentono di generare ulteriori dati di addestramento modificando in modo intelligente le immagini esistenti. Tuttavia, nonostante l'uso di queste tecniche, l'IOU ottenuto con la rete neurale deep non supera il valore di 0.55.
     In conclusione, l'incapacità della rete neurale deep di raggiungere i risultati dei metodi precedenti (Python e MATLAB) potrebbe essere attribuita alla dimensione limitata del dataset di addestramento e alla conseguente difficoltà di apprendimento delle caratteristiche discriminanti delle pinne di delfino. L'acquisizione di un dataset più ampio e l'implementazione di strategie di addestramento più avanzate potrebbero essere necessarie per superare questa sfida e migliorare le prestazioni della rete neurale deep nell'estrazione delle maschere.
-    \subsection{Matching features}
     \newpage
 
+    \subsection{Matching features}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=\textwidth]{assets/images/results/result_match.png}   
+      \caption{Python SPIR matches}
+    \end{figure}
+
+    La versione Python del sistema SPIR ha mostrato risultati promettenti in termini di match delle feature. Grazie all'implementazione ottimizzata e alle migliorate tecniche di estrazione delle maschere, il sistema è stato in grado di ottenere un alto tasso di successo nel match delle feature tra le immagini di delfini.
+    I risultati positivi ottenuti con la versione Python di SPIR hanno aperto nuove prospettive e opportunità per l'applicazione del sistema. La sua efficacia nel riconoscimento dei delfini attraverso le feature delle pinne può essere sfruttata in diversi ambiti, come la ricerca e il monitoraggio delle popolazioni di delfini, la conservazione della fauna marina e la gestione degli habitat.
+    Inoltre, i risultati dei match ottenuti con la versione Python di SPIR consentono anche di considerare l'integrazione del sistema in altre piattaforme e ambienti. La flessibilità e la portabilità offerte dalla versione Python consentono di adattare il sistema per l'utilizzo su dispositivi mobili o in ambienti distribuiti, aprendo nuove prospettive per l'applicazione pratica del sistema nel campo della ricerca e della conservazione dei delfini.
+    È importante notare che, nonostante i risultati promettenti ottenuti con la versione Python di SPIR, ci sono casi in cui non riesce a superare le prestazioni della versione Matlab. Questo apre interessanti scenari per futuri miglioramenti e ottimizzazioni della fase di match delle feature.
+
+    Sebbene la versione Python di SPIR abbia dimostrato buone prestazioni nella maggior parte dei casi, ci sono situazioni (CARMELO) in cui la versione Matlab ha mostrato un margine di miglioramento rispetto alla precisione del match delle feature. Questo può essere dovuto a varie ragioni, come differenze nell'implementazione degli algoritmi o nell'ottimizzazione delle operazioni.
+    
+    \newpage
     \subsection{Prestazioni}
     Specifiche ambiente di test:
 
@@ -855,7 +869,7 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
       \item VRAM: 4 GB
       \item OS: Ubuntu 23.04
       \item Linux Kernel: 6.2.16
-      \item Python: 3.11
+      \item Python: 3.10.11
       \item MATLAB: R2023a
     \end{itemize}
 
@@ -889,13 +903,14 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
     Grazie alla riduzione delle dimensioni del dataset, il trasferimento dei dati tra client e server diventa più efficiente. I dati compressi possono essere trasmessi più rapidamente attraverso la rete, riducendo la latenza e migliorando l'esperienza utente. Ciò rende l'architettura client/server ancora più adatta per applicazioni che richiedono l'elaborazione di grandi quantità di dati, come ad esempio l'identificazione automatica delle foto di cui si sta discutendo.
 \chapter{Conclusioni}
   \section{Riepilogo degli obiettivi raggiunti}
-  \section{Possibili sviluppi futuri}
+    Durante lo studio e il porting del sistema di foto identificazione automatica SPIR da MATLAB a Python, sono stati raggiunti diversi obiettivi. L'obiettivo principale era realizzare il porting della versione originale del sistema SPIR utilizzando il linguaggio di programmazione Python. Ciò è stato ottenuto con successo, consentendo di beneficiare delle numerose librerie e dell'ampia comunità di sviluppatori associate a Python.
+    Inoltre, è stato sviluppato un'interfaccia grafica user-friendly per il sistema SPIR. L'adozione di un'interfaccia grafica offre diversi vantaggi, tra cui una maggiore facilità d'uso e accessibilità per gli utenti. Ciò apre nuovi scenari di utilizzo per il sistema SPIR, consentendo a una gamma più ampia di utenti, incluso il personale non tecnico, di sfruttarne le funzionalità.
+    In conclusione, lo studio e il porting di SPIR da MATLAB a Python hanno raggiunto gli obiettivi prefissati, consentendo di beneficiare delle caratteristiche e delle risorse offerte da Python. L'adozione di un'interfaccia grafica user-friendly amplia le possibilità di utilizzo del sistema, rendendolo accessibile a un pubblico più vasto e aprendo nuove prospettive per il suo impiego in contesti reali.
 
-\chapter{Codice sorgente}
-  \section{Implementazione dell'algoritmo SPIR}
-  \section{Implementazione della rete neurale U-Net}
-  \section{Codice per l'estrazione delle maschere con OpenCV}
-  \section{Codice per l'interfaccia utente in Flutter}
+  \section{Possibili sviluppi futuri}
+  I possibili sviluppi futuri per il sistema SPIR includono diverse direzioni che potrebbero portare a ulteriori miglioramenti e vantaggi. Alcune di queste direzioni potrebbero riguardare l'ulteriore sviluppo e miglioramento della rete neurale profonda utilizzata per l'estrazione delle maschere.
+  Uno dei potenziali miglioramenti potrebbe riguardare l'ottimizzazione e l'adattamento della rete neurale profonda per raggiungere una maggiore precisione nell'estrazione delle maschere. Ciò potrebbe comportare l'aggiunta di ulteriori strati o l'utilizzo di architetture più complesse, nonché l'adeguamento dei parametri di allenamento per ottenere risultati ancora migliori. Questo consentirebbe di ottenere maschere più precise e di alta qualità, migliorando ulteriormente le prestazioni globali del sistema SPIR.
+  Inoltre, un'altra prospettiva interessante potrebbe essere l'utilizzo dei dispositivi mobili per l'inferenza sulle maschere. Con l'avanzamento dell'hardware specializzato per l'intelligenza artificiale nei dispositivi mobili, come le unità di elaborazione neurali (NPU) integrate nei chip dei telefoni, sarebbe possibile eseguire l'inferenza delle maschere direttamente sui dispositivi stessi. Ciò comporterebbe notevoli vantaggi in termini di tempi di elaborazione e riduzione della dipendenza da risorse esterne, consentendo un'esperienza più rapida e reattiva per gli utenti.
 
   \bibliographystyle{plain}
   \bibliography{bibliography}
