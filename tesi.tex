@@ -190,13 +190,18 @@
 
 
   \section{Obiettivi}
-  Gli obiettivi di questo lavoro sono: 
+  Il presente lavoro ha come obiettivo principale il miglioramento e l'aggiornamento del sistema di identificazione automatica delle foto SPIR (Sistema di Photo Identification and Recognition). Per raggiungere tale scopo, sono stati definiti tre obiettivi specifici:
   \begin{itemize}
-    \item Realizzare il porting della versione originale del sistema di foto identificazione automatica SPIR.
-    \item Sviluppare una pipeline che includa nel sistema SPIR un'intelligenza artificiale per la funzione di estrazione delle maschere.
-    \item Sviluppare un'interfaccia grafica che renda il nuovo sistema SPIR user-friendly.
+    \item Realizzazione del porting della versione originale del sistema SPIR:
+    Il primo obiettivo del lavoro consiste nel portare la versione esistente del sistema SPIR su una piattaforma più recente o su un linguaggio di programmazione diverso. Ciò garantirà una migliore compatibilità, efficienza e scalabilità del sistema.
+    \item Sviluppo di una pipeline con intelligenza artificiale per l'estrazione delle maschere:
+    Un secondo obiettivo è l'integrazione di un'Intelligenza Artificiale (IA) all'interno del sistema SPIR per la funzione di estrazione delle maschere. L'utilizzo dell'IA consentirà di migliorare l'accuratezza e l'efficienza dell'estrazione delle maschere, consentendo un'identificazione più precisa e automatizzata delle caratteristiche di interesse nelle foto.
+    \item Sviluppo di un'interfaccia grafica user-friendly per il sistema SPIR:
+    Infine, un terzo obiettivo è lo sviluppo di un'interfaccia grafica intuitiva e user-friendly per il sistema SPIR. Questo consentirà agli utenti di interagire facilmente con il sistema, fornendo un'esperienza più fluida e accessibile durante l'analisi delle foto e la visualizzazione dei risultati.
 
   \end{itemize}
+  Attraverso il raggiungimento di questi obiettivi, ci si aspetta di ottenere un sistema SPIR migliorato e più efficiente, in grado di supportare efficacemente l'identificazione automatica delle foto e di semplificare il lavoro degli operatori coinvolti nell'analisi delle immagini.
+
 
 \chapter{Metodi}
   \section{Porting del sistema SPIR}
@@ -812,7 +817,7 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
       \includegraphics[width=\textwidth]{assets/images/results/result_masks_iou.png}   
       \caption{Confronto IOU}
     \end{figure}
-      Per testare e confrontare la nuova implementazione dell'estrazione delle maschere di pinne di delfino fatta in Python rispetto a quella precedente basata su MATLAB, è stata utilizzata come metrica l'IOU (Intersection over Union). L'IOU è una misura di similarità tra due regioni, comunemente utilizzata per valutare la qualità delle maschere generate dai modelli di segmentazione.
+    Per testare e confrontare la nuova implementazione dell'estrazione delle maschere di pinne di delfino fatta in Python rispetto a quella precedente basata su MATLAB, è stata utilizzata come metrica l'IOU (Intersection over Union). L'IOU è una misura di similarità tra due regioni, comunemente utilizzata per valutare la qualità delle maschere generate dai modelli di segmentazione.
 
     L'IOU viene calcolato dividendo l'area dell'intersezione tra due regioni per l'area dell'unione tra le stesse regioni. In questo contesto, le regioni corrispondono alle maschere poligonali che rappresentano le pinne di delfino. Un valore di IOU pari a 1 indica una perfetta sovrapposizione tra le due maschere, mentre un valore di 0 indica che le maschere non hanno regioni in comune.
 
@@ -823,13 +828,46 @@ Durante questa analisi e discussione dei risultati, saranno anche evidenziati i 
     Infine, è stato possibile confrontare le due implementazioni calcolando la media degli incrementi dell'IOU rispetto alla versione precedente.
     È emerso che l'implementazione in Python ha mostrato un incremento medio dell'IOU di circa il 6\% rispetto all'implementazione precedente in MATLAB.
     Questo suggerisce che la nuova implementazione in Python ha prodotto maschere di pinne di delfino più accurate e simili alle maschere di riferimento presenti nel dataset.
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=\textwidth]{assets/images/results/result_mask_deep.png}   
+      \caption{Confrontro maschera predetta dall'IA}
+    \end{figure}
+    L'utilizzo di una rete neurale profonda (deep neural network) per l'estrazione delle maschere potrebbe non aver raggiunto i risultati aspettati rispetto ai metodi precedenti, ovvero l'implementazione in Python e quella in MATLAB. Ciò potrebbe essere attribuito principalmente alla dimensione limitata del dataset utilizzato per addestrare la rete neurale.
+    \\
+    Il fatto che il dataset di addestramento contenga solo 150 immagini con le relative maschere poligonali potrebbe non essere sufficiente per catturare la complessità e la varietà delle pinne di delfino presenti nelle foto. Le reti neurali profonde, soprattutto quando addestrate con un numero limitato di dati, possono essere soggette a problemi di generalizzazione e potrebbero non essere in grado di apprendere efficacemente le caratteristiche discriminanti delle pinne.
+    \\
+    Nel tentativo di affrontare questa sfida, sono state applicate tecniche di data augmentation, che consentono di generare ulteriori dati di addestramento modificando in modo intelligente le immagini esistenti. Tuttavia, nonostante l'uso di queste tecniche, l'IOU ottenuto con la rete neurale deep non supera il valore di 0.55.
+    In conclusione, l'incapacità della rete neurale deep di raggiungere i risultati dei metodi precedenti (Python e MATLAB) potrebbe essere attribuita alla dimensione limitata del dataset di addestramento e alla conseguente difficoltà di apprendimento delle caratteristiche discriminanti delle pinne di delfino. L'acquisizione di un dataset più ampio e l'implementazione di strategie di addestramento più avanzate potrebbero essere necessarie per superare questa sfida e migliorare le prestazioni della rete neurale deep nell'estrazione delle maschere.
     \subsection{Matching features}
+    \newpage
+
     \subsection{Prestazioni}
-      \begin{figure}[H]
-        \centering
-        \includegraphics[width=\textwidth]{assets/images/results/result_execution_time.png}   
-        \caption{Tempi di esecuzione estrazione maschere}
-      \end{figure}
+    Specifiche configurazione di test:
+
+    \begin{itemize}
+      \item Processore: AMD 4800H
+      \item CPU Cores: 8
+      \item Threads: 16
+      \item RAM: 48 GB
+      \item GPU: NVIDIA GTX 1650 Ti
+      \item VRAM: 4 GB
+      \item OS: Ubuntu 23.04
+      \item Linux Kernel: 6.2.16
+    \end{itemize}
+
+    La nuova implementazione del modulo di estrazione delle maschere scritta in Python ha dimostrato un notevole miglioramento sia in termini di tempo di esecuzione che di qualità delle maschere rispetto alla precedente implementazione basata su MATLAB. Questi risultati sono stati ottenuti grazie all'utilizzo di tecniche più efficienti e all'ottimizzazione delle operazioni di elaborazione delle immagini.
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=\textwidth]{assets/images/results/result_execution_time.png}   
+      \caption{Tempi di esecuzione estrazione maschere}
+    \end{figure}
+    
+    Iniziamo analizzando il tempo di esecuzione. La nuova implementazione in Python è riuscita ad accelerare significativamente il processo di estrazione delle maschere rispetto a quella basata su MATLAB. Con un tempo di esecuzione fino a 12 volte minore, il sistema è diventato notevolmente più efficiente, consentendo di analizzare un maggior numero di immagini nel medesimo intervallo di tempo. Questo rappresenta un vantaggio significativo in termini di produttività e possibilità di scalabilità del sistema.
+      
+
 
 \chapter{Conclusioni}
   \section{Riepilogo degli obiettivi raggiunti}
